@@ -1,0 +1,21 @@
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/*.app-header img {
+    width: 100%;
+    min-height: 100%;
+    background-image: url(../../../assets/images/header.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+*/
+
+.app-header img {
+    max-width: 100%;
+    height: auto;
+}

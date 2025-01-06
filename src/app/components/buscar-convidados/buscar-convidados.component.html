@@ -1,0 +1,70 @@
+<div class="elemento-com-borda">
+  <div class="container">
+    <!-- Formulário para buscar convidado -->
+    <div *ngIf="!showingResponse">
+      <h2>Buscar Convidado</h2>
+      <form (ngSubmit)="buscarConvidado()">
+        <div class="form-group">
+          <label for="idConvidado">ID do Convidado:</label>
+          <input
+            type="text"
+            id="idConvidado"
+            class="form-control"
+            [(ngModel)]="idConvidado"
+            name="idConvidado"
+            required
+          />
+
+          <label for="idEvento">ID do Evento:</label>
+          <input
+            type="text"
+            id="idEvento"
+            class="form-control"
+            [(ngModel)]="idEvento"
+            name="idEvento"
+            required
+          />
+
+          <label for="idGrupoConvidados">ID do Grupo de Convidados:</label>
+          <input
+            type="text"
+            id="idGrupoConvidados"
+            class="form-control"
+            [(ngModel)]="idGrupoConvidados"
+            name="idGrupoConvidados"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+    </div>
+
+    <!-- Exibição de informações de um único convidado -->
+    <div *ngIf="convidado" class="resultado">
+      <h2>Informações do Convidado:</h2>
+      <div class="convidado">
+        <p><strong>Convidado #1</strong></p>
+        <p><strong>Nome:</strong> {{ convidado.nome }}</p>
+        <p><strong>Telefone:</strong> {{ convidado.telefone }}</p>
+        <p><strong>Email:</strong> {{ convidado.email }}</p>
+      </div>
+      <button type="click" class="btn btn-primary" (click)="resetarBusca()">Voltar</button>
+    </div>
+
+    <!-- Exibição de informações de múltiplos convidados -->
+    <div *ngIf="convidados" class="resultado">
+      <h2>Informações dos Convidados:</h2>
+      <div *ngFor="let convidado of convidados; let idx = index" class="convidado">
+        <p><strong>Convidado #{{ idx + 1 }}</strong></p>
+        <p><strong>Nome:</strong> {{ convidado.nome }}</p>
+        <p><strong>Telefone:</strong> {{ convidado.telefone }}</p>
+        <p><strong>Email:</strong> {{ convidado.email }}</p>
+      </div>
+      <button type="click" class="btn btn-primary" (click)="resetarBusca()">Voltar</button>
+    </div>
+
+    <!-- Exibição de erro -->
+    <div *ngIf="erro" class="alert alert-danger">
+      {{ erro }}
+    </div>
+  </div>
+</div>

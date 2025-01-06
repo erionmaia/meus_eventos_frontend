@@ -1,0 +1,71 @@
+.elemento-com-borda {
+    position: relative;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.elemento-com-borda::before,
+.elemento-com-borda::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80%;
+    background: url('/assets/images/borda - 1679x400.png');
+    z-index: 1;
+}
+
+.elemento-com-borda::before {
+    left: 0;
+    background-position: left;
+}
+
+.elemento-com-borda::after {
+    right: 0;
+    background-position: right;
+}
+
+/* Estilo do container */
+.container {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    background: #f24b9983;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f077b083;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 23px;
+  }
+  
+  .menu ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .menu li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  .menu a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #D90718;
+  }
+  
+  .menu a:hover {
+    color: #8c040f;
+  }

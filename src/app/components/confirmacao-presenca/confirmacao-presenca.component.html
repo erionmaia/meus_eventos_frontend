@@ -1,0 +1,34 @@
+<div class="elemento-com-borda">
+    <div class="container">
+        <h2>Confirmação de Presença</h2>
+      
+        <div *ngFor="let convidado of convidados; let i = index" class="convidado">
+          <h3>{{ convidado.nome }}</h3>
+      
+          <label>
+            <input type="checkbox" [(ngModel)]="convidado.statusConfirmacao"/>
+            Confirmar presença
+          </label>
+      
+          <!-- Dropdown para mulheres adultas -->
+          <div *ngIf="convidado.sexo === 'feminino' && convidado.adulto">
+            <label for="tamanhoSandalia-{{ i }}">Escolha o tamanho da sandália:</label>
+            <select
+              id="tamanhoSandalia-{{ i }}"
+              [(ngModel)]="convidado.tamanhoSandalia"
+              required
+            >
+              <option *ngFor="let numero of tamanhosSandalia" [value]="numero">
+                {{ numero }}
+              </option>
+            </select>
+          </div>
+        </div>
+      
+        <button (click)="confirmarPresenca()" class="btn btn-primary">Confirmar Presença</button>
+        <div *ngIf="erro" class="alert alert-danger">
+          {{ erro }}
+        </div>
+    </div>
+</div>
+  

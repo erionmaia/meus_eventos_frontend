@@ -1,0 +1,35 @@
+.app-footer {
+    position: relative; /* Permite posicionamento absoluto para os elementos internos */
+    text-align: center; /* Centraliza o conteúdo horizontalmente */
+    color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-content {
+    position: relative; /* Define como referência para os elementos filhos */
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.app-footer img {
+    width: 100%; /* Faz a imagem ocupar toda a largura do rodapé */
+    height: auto;
+}
+
+.app-footer p {
+    position: absolute; /* Posiciona o texto sobre a imagem */
+    top: 50%; /* Move o texto para o centro vertical */
+    left: 50%; /* Move o texto para o centro horizontal */
+    transform: translate(-50%, -50%); /* Centraliza perfeitamente no meio da imagem */
+    margin: 0;
+    padding: 0;
+    font-size: 14px; /* Ajuste o tamanho da fonte conforme necessário */
+    color: #ffffff; /* Altere a cor para branco ou outra cor que contraste com a imagem */
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para melhorar a leitura (opcional) */
+    border-radius: 5px; /* Bordas arredondadas para o fundo do texto (opcional) */
+    padding: 5px 10px; /* Espaçamento interno do texto */
+}
