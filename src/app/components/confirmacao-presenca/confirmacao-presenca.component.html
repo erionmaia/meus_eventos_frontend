@@ -5,9 +5,9 @@
         <div *ngFor="let convidado of convidados; let i = index" class="convidado">
           <h3>{{ convidado.nome }}</h3>
       
-          <label>
-            <input type="checkbox" [(ngModel)]="convidado.statusConfirmacao"/>
-            Confirmar presença
+          <label class="custom-checkbox">
+            <input type="checkbox" [(ngModel)]="convidado.statusConfirmacao" id="checkbox"/>
+            <span></span>Confirmar
           </label>
       
           <!-- Dropdown para mulheres adultas -->
@@ -15,10 +15,11 @@
             <label for="tamanhoSandalia-{{ i }}">Escolha o tamanho da sandália:</label>
             <select
               id="tamanhoSandalia-{{ i }}"
+              class="custom-select"
               [(ngModel)]="convidado.tamanhoSandalia"
               required
             >
-              <option *ngFor="let numero of tamanhosSandalia" [value]="numero">
+              <option *ngFor="let numero of tamanhosSandalia" [value]="numero" class="custom-option">
                 {{ numero }}
               </option>
             </select>
