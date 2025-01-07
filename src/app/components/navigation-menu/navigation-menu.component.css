@@ -60,6 +60,6 @@
 
 @media (max-width: 480px) {
     .menu {
-        font-size: 12px; /* Fonte ainda menor para telas muito pequenas */
+        font-size: 10px; /* Fonte ainda menor para telas muito pequenas */
     }
 }
