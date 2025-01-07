@@ -28,7 +28,7 @@ export class ConfirmacaoPresencaComponent implements OnInit {
     // Busca os convidados
     this.convidadosService.getConvidadoById(idConvidado, this.idEvento, idGrupoConvidados).subscribe(
       (data) => {
-        this.convidados = data.convidados || data.convidado;
+        this.convidados = data.convidados || [data.convidado];
       },
       (error) => {
         this.erro = 'Erro ao buscar o convidado. Verifique o ID.';
