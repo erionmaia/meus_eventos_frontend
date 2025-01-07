@@ -45,3 +45,13 @@ h1 {
     color: #D90718;
     text-align: center;
 }
+
+p {
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    color: #D90718;
+    text-align: justify; 
+    font-size: 12;
+}
