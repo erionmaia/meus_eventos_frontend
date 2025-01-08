@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ConvidadosService {
-  private apiUrl = 'http://localhost:3000/daisyEArthur';
+  private apiUrl = 'http://https://meus-eventos-backend.onrender.com/daisyEArthur';
 
   constructor(private http: HttpClient) {}
 
