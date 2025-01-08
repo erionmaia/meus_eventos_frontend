@@ -10,7 +10,7 @@ import { ConvidadosService } from '../../services/convidados.service';
 export class ConfirmacaoPresencaComponent implements OnInit {
   convidados: any = null;
   tamanhosSandalia: number[] = Array.from({ length: 11 }, (_, i) => i + 33); // [33, 34, ..., 43]
-  idEvento: string = '';
+  idEventos: string = '';
   erro: string = '';
 
   constructor(
@@ -21,12 +21,12 @@ export class ConfirmacaoPresencaComponent implements OnInit {
 
   ngOnInit(): void {
     // Obtém os parâmetros da URL
-    this.idEvento = this.route.snapshot.queryParamMap.get('idEvento') || '';
-    const idConvidado = this.route.snapshot.queryParamMap.get('idConvidado') || '';
-    const idGrupoConvidados = this.route.snapshot.queryParamMap.get('idGrupoConvidados') || '';
+    this.idEventos = this.route.snapshot.queryParamMap.get('idevento') || '';
+    const idConvidados = this.route.snapshot.queryParamMap.get('idconvidado') || '';
+    const idGrupoConvidados = this.route.snapshot.queryParamMap.get('idgrupoconvidados') || '';
 
     // Busca os convidados
-    this.convidadosService.getConvidadoById(idConvidado, this.idEvento, idGrupoConvidados).subscribe(
+    this.convidadosService.getConvidadoById(idConvidados, this.idEventos, idGrupoConvidados).subscribe(
       (data) => {
         this.convidados = data.convidados || [data.convidado];
       },
