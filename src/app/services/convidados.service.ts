@@ -8,12 +8,12 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ConvidadosService {
-  private apiUrl = 'http://https://meus-eventos-backend.onrender.com/daisyEArthur';
+  private apiUrl = 'https://meus-eventos-backend.onrender.com/daisyEArthur';
 
   constructor(private http: HttpClient) {}
 
-  getConvidadoById(convidadoId: string, eventoId: string, idGrupoConvidados?: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/eventos/${eventoId}/convidados/${convidadoId}${idGrupoConvidados ? '?idGrupoConvidados='+idGrupoConvidados : ''}`)
+  getConvidadoById(idConvidados: string, idEventos: string, idGrupoConvidados?: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/eventos/${idEventos}/convidados/${idConvidados}${idGrupoConvidados ? '?idGrupoConvidados='+idGrupoConvidados : ''}`)
       .pipe(catchError(this.handleError));
   }
 
