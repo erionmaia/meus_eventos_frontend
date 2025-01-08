@@ -21,9 +21,9 @@ export class ConfirmacaoPresencaComponent implements OnInit {
 
   ngOnInit(): void {
     // Obtém os parâmetros da URL
-    this.idEventos = this.route.snapshot.queryParamMap.get('idevento') || '';
-    const idConvidados = this.route.snapshot.queryParamMap.get('idconvidado') || '';
-    const idGrupoConvidados = this.route.snapshot.queryParamMap.get('idgrupoconvidados') || '';
+    this.idEventos = this.route.snapshot.queryParamMap.get('idEventos') || '';
+    const idConvidados = this.route.snapshot.queryParamMap.get('idConvidados') || '';
+    const idGrupoConvidados = this.route.snapshot.queryParamMap.get('idGrupoConvidados') || '';
 
     // Busca os convidados
     this.convidadosService.getConvidadoById(idConvidados, this.idEventos, idGrupoConvidados).subscribe(
