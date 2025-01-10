@@ -55,3 +55,18 @@ p {
     text-align: justify; 
     font-size: 12;
 }
+
+.hero-image {
+    display: flex; /* Ativa o Flexbox */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    height: 100vh; /* Altura total da tela */
+    width: 100%; /* Largura total */
+    margin: 0; /* Remove margens padrão */
+    padding: 0; /* Remove espaçamentos padrão */
+}
+
+.hero-image img {
+    max-width: 50%;
+    height: auto;
+}
