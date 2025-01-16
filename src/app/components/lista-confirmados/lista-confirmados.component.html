@@ -1,0 +1,18 @@
+<div class="container">
+    <!-- Formulário para buscar convidado -->
+    <!-- Exibição de informações de múltiplos convidados -->
+    <div *ngIf="convidados" class="resultado">
+    <h2>Informações dos Convidados:</h2>
+    <div *ngFor="let convidado of convidados; let idx = index" class="convidado">
+        <p><strong>Convidado #{{ idx + 1 }}</strong></p>
+        <p><strong>Nome:</strong> {{ convidado.nome }}</p>
+        <p><strong>Telefone:</strong> {{ convidado.telefone }}</p>
+        <p><strong>Email:</strong> {{ convidado.email }}</p>
+    </div>
+</div>
+
+    <!-- Exibição de erro -->
+    <div *ngIf="erro" class="alert alert-danger">
+    {{ erro }}
+    </div>
+</div>  

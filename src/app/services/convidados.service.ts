@@ -17,6 +17,11 @@ export class ConvidadosService {
       .pipe(catchError(this.handleError));
   }
 
+  getConvidadosConfirmados(idEventos: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/eventos/${idEventos}/listarConfirmados`)
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     return throwError(error.error || 'Erro ao comunicar com o servidor.');
   }

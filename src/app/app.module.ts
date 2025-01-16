@@ -14,6 +14,7 @@ import { InserirConvidadoComponent } from './components/inserir-convidado/inseri
 import { AppRoutingModule } from './app-routing.module';
 import { NavigationMenuComponent } from './components/navigation-menu/navigation-menu.component';
 import { ConfirmacaoPresencaComponent } from './components/confirmacao-presenca/confirmacao-presenca.component';
+import { ListaConfirmadosComponent } from './components/lista-confirmados/lista-confirmados.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ConfirmacaoPresencaComponent } from './components/confirmacao-presenca/
     ListaPresentesComponent,
     InserirConvidadoComponent,
     NavigationMenuComponent,
-    ConfirmacaoPresencaComponent
+    ConfirmacaoPresencaComponent,
+    ListaConfirmadosComponent
   ],
   imports: [
     BrowserModule,
