@@ -10,6 +10,8 @@ import { ConvidadosService } from '../../services/convidados.service';
 export class ListaConfirmadosComponent implements OnInit {
 
   convidados: any = null;
+  groupedConvidados: { [key: string]: any[] } = {};
+  individualConvidados: any[] = [];
   idEventos: string = '';
   erro: string = '';
 
@@ -25,12 +27,25 @@ export class ListaConfirmadosComponent implements OnInit {
     this.convidadosService.getConvidadosConfirmados(this.idEventos).subscribe(
       (data) => {
         this.convidados = data.convidados || [];
-        console.log('this.convidados', this.convidados);
+        this.separateConvidados();
       },
       (error) => {
         this.erro = 'Erro ao buscar os convidados confirmados.';
       }
     );
+  }
+
+  separateConvidados(): void {
+    this.convidados.forEach((convidado: any) => {
+      if (convidado.idGrupoConvidados) {
+        if (!this.groupedConvidados[convidado.idGrupoConvidados]) {
+          this.groupedConvidados[convidado.idGrupoConvidados] = [];
+        }
+        this.groupedConvidados[convidado.idGrupoConvidados].push(convidado);
+      } else {
+        this.individualConvidados.push(convidado);
+      }
+    });
   }
 
 }
