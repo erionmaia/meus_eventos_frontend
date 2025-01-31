@@ -22,16 +22,14 @@ export class ListaConfirmadoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('lista-confirmado');
-    console.log("this.route.snapshot.queryParamMap", this.route.snapshot.queryParamMap);
-    console.log("this.route.snapshot.queryParamMap.get('idConvidados')", this.route.snapshot.queryParamMap.get('idConvidados'));
     this.idEventos = this.route.snapshot.queryParamMap.get('idEventos') || '';
     const idConvidados = this.route.snapshot.queryParamMap.get('IdConvidados') || '';
     const idGrupoConvidados = this.route.snapshot.queryParamMap.get('IdGrupoConvidados') || '';
-    console.log(`this.idEventos: ${this.idEventos}, idConvidados: ${idConvidados}, idGrupoConvidados: ${idGrupoConvidados}`);
-    this.convidadosService.getConvidadoConfirmado(this.idEventos, idConvidados, idGrupoConvidados).subscribe(
+    this.convidadosService.getConvidadoConfirmado(idConvidados, this.idEventos, idGrupoConvidados).subscribe(
       (data) => {
+        console.log('data', data);
         this.convidados = data.convidados || [];
+        console.log('this.convidados', this.convidados);
       },
       (error) => {
         this.erro = 'Erro ao buscar os convidados confirmados.';
