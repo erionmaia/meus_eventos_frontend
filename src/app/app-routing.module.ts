@@ -6,6 +6,7 @@ import { ListaPresentesComponent } from './components/lista-presentes/lista-pres
 import { InserirConvidadoComponent } from './components/inserir-convidado/inserir-convidado.component';
 import { ConfirmacaoPresencaComponent } from './components/confirmacao-presenca/confirmacao-presenca.component';
 import { ListaConfirmadosComponent } from './components/lista-confirmados/lista-confirmados.component';
+import { ListaConfirmadoComponent } from './components/lista-confirmado/lista-confirmado.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'inserir-convidado', component: InserirConvidadoComponent },
   { path: 'confirmacao-presenca', component: ConfirmacaoPresencaComponent },
   { path: 'lista-confirmados', component: ListaConfirmadosComponent },
+  { path: 'lista-confirmado', component: ListaConfirmadoComponent }
 ];
 
 @NgModule({

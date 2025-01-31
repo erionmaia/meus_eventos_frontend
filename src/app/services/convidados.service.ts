@@ -17,6 +17,11 @@ export class ConvidadosService {
       .pipe(catchError(this.handleError));
   }
 
+  getConvidadoConfirmado(idConvidados: string, idEventos: string, idGrupoConvidado?: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/eventos/${idEventos}/listarConfirmados/${idConvidados}${idGrupoConvidado ? '?idGrupoConvidado='+idGrupoConvidado : ''}`)
+      .pipe(catchError(this.handleError));
+  }
+
   getConvidadosConfirmados(idEventos: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/eventos/${idEventos}/listarConfirmados`)
       .pipe(catchError(this.handleError));

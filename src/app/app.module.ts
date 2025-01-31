@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NavigationMenuComponent } from './components/navigation-menu/navigation-menu.component';
 import { ConfirmacaoPresencaComponent } from './components/confirmacao-presenca/confirmacao-presenca.component';
 import { ListaConfirmadosComponent } from './components/lista-confirmados/lista-confirmados.component';
+import { ListaConfirmadoComponent } from './components/lista-confirmado/lista-confirmado.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ListaConfirmadosComponent } from './components/lista-confirmados/lista-
     InserirConvidadoComponent,
     NavigationMenuComponent,
     ConfirmacaoPresencaComponent,
-    ListaConfirmadosComponent
+    ListaConfirmadosComponent,
+    ListaConfirmadoComponent
   ],
   imports: [
     BrowserModule,
