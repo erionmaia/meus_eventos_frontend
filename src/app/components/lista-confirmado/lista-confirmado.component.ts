@@ -24,7 +24,7 @@ export class ListaConfirmadoComponent implements OnInit {
   ngOnInit(): void {
     this.idEventos = this.route.snapshot.queryParamMap.get('idEventos') || '2';
     const idConvidados = this.route.snapshot.queryParamMap.get('idConvidados') || '';
-    const idGrupoConvidados = this.route.snapshot.queryParamMap.get('IdGrupoConvidados') || '';
+    const idGrupoConvidados = this.route.snapshot.queryParamMap.get('idGrupoConvidados') || '';
     this.convidadosService.getConvidadoConfirmado(idConvidados, this.idEventos, idGrupoConvidados).subscribe(
       (data) => {
         this.convidados = data.convidados || [];
