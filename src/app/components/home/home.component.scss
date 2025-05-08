@@ -1,3 +1,5 @@
+@import '../../../styles/shared.scss';
+
 // Variáveis de cores
 :root {
   --primary-color: #FF6B6B;
@@ -107,16 +109,7 @@ body {
 }
 
 .how-it-works {
-  padding: 4rem 2rem;
-  background-color: var(--background-color);
-  
-  h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 3rem;
-    color: var(--text-color);
-    font-weight: 600;
-  }
+  @extend .section;
   
   .steps-container {
     max-width: 1000px;
@@ -126,14 +119,8 @@ body {
     gap: 2rem;
     
     .step {
+      @extend .card;
       text-align: center;
-      padding: 2rem;
-      background-color: var(--card-bg);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-      
-      &:hover { transform: translateY(-5px); }
       
       .step-icon {
         font-size: 2.5rem;
@@ -158,16 +145,7 @@ body {
 }
 
 .testimonials {
-  padding: 4rem 2rem;
-  background-color: var(--background-color);
-  
-  h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 3rem;
-    color: var(--text-color);
-    font-weight: 600;
-  }
+  @extend .section;
   
   .testimonials-container {
     max-width: 1000px;
@@ -177,10 +155,7 @@ body {
     gap: 2rem;
     
     .testimonial {
-      background-color: var(--card-bg);
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      @extend .card;
       
       .testimonial-content {
         margin-bottom: 1.5rem;
@@ -224,7 +199,6 @@ body {
   }
 }
 
-// Footer
 .footer {
   background-color: var(--footer-bg);
   padding: 4rem 5% 2rem;
@@ -278,7 +252,6 @@ body {
   }
 }
 
-// Responsividade
 @media (max-width: 768px) {
   .navbar {
     padding: 1rem;
@@ -292,10 +265,5 @@ body {
     .glide__slide img {
       height: 300px;
     }
-  }
-
-  .how-it-works,
-  .testimonials {
-    padding: 2rem 1rem;
   }
 } 
