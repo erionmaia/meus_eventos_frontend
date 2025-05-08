@@ -1,4 +1,4 @@
-@import '../../../styles/shared.scss';
+@import '../../styles/shared.scss';
 
 .header {
   position: fixed;
@@ -80,18 +80,14 @@
 }
 
 .how-it-works {
-  @extend .section;
-  
   .steps-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    @extend .container;
+    @extend .grid;
+    @extend .grid-auto-fit;
     
     .step {
       @extend .card;
-      text-align: center;
+      @extend .text-center;
       
       .step-icon {
         font-size: 2.5rem;
@@ -116,14 +112,10 @@
 }
 
 .testimonials {
-  @extend .section;
-  
   .testimonials-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: grid;
+    @extend .container;
+    @extend .grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
     
     .testimonial {
       @extend .card;
@@ -176,9 +168,8 @@
   color: var(--text-color);
 
   .footer-content {
-    display: grid;
+    @extend .grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
   }
