@@ -1,72 +1,62 @@
-.elemento-com-borda {
-    position: relative;
-    padding: 20px;
+#container {
+    max-width: 80%;
+    height: 350px;
+}
+
+#container:nth-child(odd) {
+    grid-column: 1;
+}
+
+#container:nth-child(even) {
+    margin-top: 500px;
+    grid-column: 2;
+}
+
+.steps-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.glide {
+    max-width: 90%;
     overflow: hidden;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.elemento-com-borda::before,
-.elemento-com-borda::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 80%;
-    background: url('/assets/images/borda - 1679x400.png');
-    z-index: 1;
-}
-
-.elemento-com-borda::before {
-    left: 0;
-    background-position: left;
-}
-
-.elemento-com-borda::after {
-    right: 0;
-    background-position: right;
-}
-
-/* Estilo do container */
-.container {
-    position: relative;
-    z-index: 2;
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #cccccc;
-    border-radius: 8px;
-    background: #f24b9983;
-}
-
-h1 {
-    font-family: "Montserrat", serif;
-    font-optical-sizing: auto;
-    font-weight: 800;
-    font-style: normal;
-    color: #D90718;
+.glide__slides {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    width: 100%;
     text-align: center;
+    list-style: '';
 }
 
-p {
-    font-family: "Montserrat", serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    color: #D90718;
-    text-align: justify; 
-    font-size: 12;
-}
-
-.hero-image {
-    display: flex; /* Ativa o Flexbox */
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    height: 100vh; /* Altura total da tela */
-    width: 100%; /* Largura total */
-    margin: 0; /* Remove margens padrão */
-    padding: 0; /* Remove espaçamentos padrão */
-}
-
-.hero-image img {
-    max-width: 50%;
+.glide__slide img {
+    max-width: 100%;
     height: auto;
+    display: block;
+    margin: auto;
+    border-radius: 20px;
+}
+
+@media (min-width: 500px) {
+    .glide__slide img {
+        max-width: 90%;
+    }
+}
+
+@media (min-width: 900px) {
+    .glide__slide img {
+        max-width: 91%;
+    }
+}
+
+@media (min-width: 1600px) {
+    .glide__slide img {
+        max-width: 88%;
+    }
 }
