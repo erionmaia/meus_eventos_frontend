@@ -1,34 +1,5 @@
 @import '../../../styles/shared.scss';
 
-// Variáveis de cores
-:root {
-  --primary-color: #FF6B6B;
-  --secondary-color: #4ECDC4;
-  --background-color: #f7f2ec;
-  --text-color: #5b5851;
-  --header-bg: #ffffff;
-  --footer-bg: #f8f9fa;
-  --card-bg: #ffffff;
-  --border-color: #e0e0e0;
-}
-
-.dark-theme {
-  --primary-color: #FF6B6B;
-  --secondary-color: #4ECDC4;
-  --background-color: #5b5851;
-  --text-color: #f7f2ec;
-  --header-bg: #2d2d2d;
-  --footer-bg: #2d2d2d;
-  --card-bg: #2d2d2d;
-  --border-color: #404040;
-}
-
-body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: all 0.3s ease;
-}
-
 .header {
   position: fixed;
   top: 0;
