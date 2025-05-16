@@ -1,0 +1,58 @@
+<section class="login-section">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h1>Bem-vindo(a)</h1>
+        <p>Entre para acessar sua conta</p>
+      </div>
+
+      <form class="login-form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            [(ngModel)]="loginData.email" 
+            required 
+            placeholder="Seu e-mail"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <div class="password-input">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              id="password" 
+              name="password" 
+              [(ngModel)]="loginData.password" 
+              required 
+              placeholder="Sua senha"
+            >
+            <button 
+              type="button" 
+              class="toggle-password" 
+              (click)="togglePasswordVisibility()"
+            >
+              <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <a href="/forgot-password" class="forgot-password">Esqueceu a senha?</a>
+        </div>
+
+        <button type="submit" class="login-button" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Entrar</span>
+          <span *ngIf="isLoading" class="loading-spinner"></span>
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <p>Não tem uma conta? <a href="/register">Cadastre-se</a></p>
+      </div>
+    </div>
+  </div>
+</section> 
