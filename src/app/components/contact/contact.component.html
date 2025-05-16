@@ -1,0 +1,91 @@
+<section class="contact-section">
+  <div class="container">
+    <div class="contact-content">
+      <div class="contact-info">
+        <h1>Entre em Contato</h1>
+        <p>Estamos aqui para ajudar! Envie sua mensagem e entraremos em contato o mais breve possível.</p>
+        
+        <div class="contact-details">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h3>Email</h3>
+              <p>contato@eventomeu.com</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <h3>Telefone</h3>
+              <p>(11) 99999-9999</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h3>Endereço</h3>
+              <p>São Paulo, SP - Brasil</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form class="contact-form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Nome</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            [(ngModel)]="contactData.name" 
+            required 
+            placeholder="Seu nome completo"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            [(ngModel)]="contactData.email" 
+            required 
+            placeholder="Seu email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Assunto</label>
+          <input 
+            type="text" 
+            id="subject" 
+            name="subject" 
+            [(ngModel)]="contactData.subject" 
+            required 
+            placeholder="Assunto da mensagem"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="message">Mensagem</label>
+          <textarea 
+            id="message" 
+            name="message" 
+            [(ngModel)]="contactData.message" 
+            required 
+            placeholder="Sua mensagem"
+            rows="5"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="submit-button" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Enviar Mensagem</span>
+          <span *ngIf="isLoading" class="loading-spinner"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
