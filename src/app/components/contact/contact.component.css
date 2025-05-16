@@ -54,7 +54,7 @@
 }
 
 .contact-form {
-  background-color: var(--background-color);
+  background-color: var(--card-bg);
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -80,6 +80,7 @@
   font-size: 1rem;
   transition: border-color 0.3s ease;
   color: var(--text-color);
+  background-color: var(--textarea-color);
 }
 
 .form-group input:focus,
