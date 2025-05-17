@@ -16,7 +16,6 @@ import { ContactComponent } from './components/contact/contact.component';
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
     FooterComponent,
     HomeComponent,
     AboutComponent
@@ -27,6 +26,7 @@ import { ContactComponent } from './components/contact/contact.component';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HeaderComponent,
     ContactComponent
   ],
   providers: [ConvidadosService],

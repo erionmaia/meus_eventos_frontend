@@ -1,33 +1,38 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ThemeService } from '../../services/theme.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
   isDarkTheme = false;
+  isMenuOpen = false;
 
-  constructor(
-    private themeService: ThemeService,
-    private router: Router
-  ) {
+  constructor(private themeService: ThemeService) {}
+
+  ngOnInit() {
     this.themeService.isDarkTheme$.subscribe(isDark => {
       this.isDarkTheme = isDark;
     });
   }
 
-  ngOnInit(): void {
-    // O tema já é inicializado no ThemeService
-  }
-
-  toggleTheme(): void {
+  toggleTheme() {
     this.themeService.toggleTheme();
   }
 
-  navigateTo(route: string): void {
-    this.router.navigate([route]);
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+    document.body.style.overflow = this.isMenuOpen ? 'hidden' : '';
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false;
+    document.body.style.overflow = '';
   }
 }

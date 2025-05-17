@@ -3,20 +3,30 @@
     <div class="logo">
       <img [src]="isDarkTheme ? 'assets/images/Prancheta 6-8-menor.png' : 'assets/images/Prancheta 2-8-menor.png'" alt="Logo">
     </div>
-    <div class="nav-links">
-      <a (click)="navigateTo('')" style="cursor: pointer;">Home</a>
-      <a (click)="navigateTo('about')" style="cursor: pointer;">Sobre</a>
-      <a (click)="navigateTo('plans')" style="cursor: pointer;">Planos</a>
-      <a (click)="navigateTo('services')" style="cursor: pointer;">Serviços</a>
-      <a (click)="navigateTo('contact')" style="cursor: pointer;">Contato</a>
-    </div>
-    <div class="nav-right">
-      <div class="theme-toggle">
-        <button (click)="toggleTheme()">
-          <i class="fas" [class.fa-sun]="!isDarkTheme" [class.fa-moon]="isDarkTheme"></i>
-        </button>
+    
+    <button class="menu-toggle" [class.active]="isMenuOpen" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-container" [class.active]="isMenuOpen">
+      <div class="nav-links">
+        <a routerLink="/" (click)="closeMenu()">Home</a>
+        <a routerLink="/about" (click)="closeMenu()">Sobre</a>
+        <a routerLink="/plans" (click)="closeMenu()">Planos</a>
+        <a routerLink="/services" (click)="closeMenu()">Serviços</a>
+        <a routerLink="/contact" (click)="closeMenu()">Contato</a>
       </div>
-      <a (click)="navigateTo('login')" class="login-btn" style="cursor: pointer;">Login</a>
+      <div class="nav-right">
+        <div class="theme-toggle">
+          <button (click)="toggleTheme()">
+            <i [class]="isDarkTheme ? 'fas fa-sun' : 'fas fa-moon'"></i>
+            <span>{{ isDarkTheme ? ' Claro' : ' Escuro' }}</span>
+          </button>
+        </div>
+        <a routerLink="/login" class="login-btn" (click)="closeMenu()">Login</a>
+      </div>
     </div>
   </nav>
 </header>
