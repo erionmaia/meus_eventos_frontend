@@ -1,0 +1,52 @@
+.card {
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+}
+
+.display-4 {
+  font-weight: 600;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  font-weight: 500;
+}
+
+.list-unstyled {
+  li {
+    display: flex;
+    align-items: center;
+    
+    i {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+// Adiciona margem automática para empurrar o botão para baixo
+.card-body {
+  .list-unstyled {
+    flex-grow: 1;
+  }
+  
+  .text-center.mt-4 {
+    margin-top: auto !important;
+    padding-top: 1.5rem;
+  }
+} 
