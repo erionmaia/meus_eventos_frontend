@@ -8,11 +8,13 @@ import { TermsComponent } from './components/terms/terms.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { FaqComponent } from './components/faq/faq.component';
 import { PricingComponent } from './components/pricing/pricing.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'termos', component: TermsComponent },
   { path: 'privacidade', component: PrivacyComponent },
