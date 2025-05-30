@@ -85,13 +85,9 @@
   
   .steps-container {
     @extend .container;
-    display: grid;
+    @extend .grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 350px));
     justify-content: center;
-    gap: 2rem;
-    margin: 0 auto;
-    max-width: 1200px;
-    padding: 0 1rem;
     
     .step {
       @extend .card;

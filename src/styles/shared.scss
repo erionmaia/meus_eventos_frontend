@@ -1,0 +1,33 @@
+// Grid utilities
+.grid {
+  display: grid;
+  gap: 2rem;
+}
+
+// Card styles
+.card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Text utilities
+.text-center {
+  text-align: center;
+}
+
+// Container
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Media queries
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+} 
