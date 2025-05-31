@@ -1,11 +1,33 @@
 @import '../../styles/shared.scss';
 
+:host {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.container {
+  margin-top: 5rem;
+
+  & h1 {
+    color: var(--text-color);
+    font-size: 2.2rem;
+    font-weight: 700;
+  }
+
+  & h3 {
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.7rem;
+  }
+}
+
 .card {
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
   width: 100%;
   min-width: 390px;
+  color: var(--text-color);
   
   &:hover {
     transform: translateY(-5px);

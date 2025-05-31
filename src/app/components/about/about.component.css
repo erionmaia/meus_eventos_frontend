@@ -1,7 +1,10 @@
+@import '../../styles/shared.scss';
+
 .about-section {
   padding: 80px 0;
   background-color: var(--background-color);
   color: var(--text-color);
+  margin-top: 5rem;
 }
 
 .container {

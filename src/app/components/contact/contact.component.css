@@ -1,6 +1,9 @@
+@import '../../styles/shared.scss';
+
 .contact-section {
   padding: 4rem 2rem;
   background-color: var(--background-color);
+  margin-top: 5rem;
 }
 
 .contact-content {
