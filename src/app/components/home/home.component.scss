@@ -86,7 +86,7 @@
   .steps-container {
     @extend .container;
     @extend .grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 350px));
+    grid-template-columns: repeat(3, 1fr);
     justify-content: center;
     
     .step {
@@ -113,6 +113,17 @@
         line-height: 1.6;
       }
     }
+  }
+}
+
+@media (max-width: 900px) {
+  .how-it-works .steps-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .how-it-works .steps-container {
+    grid-template-columns: 1fr;
   }
 }
 
