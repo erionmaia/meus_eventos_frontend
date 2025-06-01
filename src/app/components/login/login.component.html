@@ -6,17 +6,20 @@
         <p>Entre para acessar sua conta</p>
       </div>
 
-      <form class="login-form" (ngSubmit)="onSubmit()">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-          <label for="email">E-mail</label>
+          <label for="email">Email</label>
           <input 
             type="email" 
             id="email" 
-            name="email" 
-            [(ngModel)]="loginData.email" 
-            required 
-            placeholder="Seu e-mail"
+            formControlName="email" 
+            placeholder="Seu email"
+            [ngClass]="{'error': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
           >
+          <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            <span class="error-text" *ngIf="loginForm.get('email')?.errors?.['required']">Email é obrigatório</span>
+            <span class="error-text" *ngIf="loginForm.get('email')?.errors?.['email']">Email inválido</span>
+          </div>
         </div>
 
         <div class="form-group">
@@ -25,18 +28,21 @@
             <input 
               [type]="showPassword ? 'text' : 'password'" 
               id="password" 
-              name="password" 
-              [(ngModel)]="loginData.password" 
-              required 
+              formControlName="password" 
               placeholder="Sua senha"
+              [ngClass]="{'error': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
             >
             <button 
               type="button" 
               class="toggle-password" 
               (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
             >
-              <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+              <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
             </button>
+          </div>
+          <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            <span class="error-text" *ngIf="loginForm.get('password')?.errors?.['required']">Senha é obrigatória</span>
           </div>
         </div>
 
@@ -44,14 +50,21 @@
           <a href="/forgot-password" class="forgot-password">Esqueceu a senha?</a>
         </div>
 
-        <button type="submit" class="login-button" [disabled]="isLoading">
-          <span *ngIf="!isLoading">Entrar</span>
-          <span *ngIf="isLoading" class="loading-spinner"></span>
+        <div class="error-message" *ngIf="error">
+          {{ error }}
+        </div>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+        >
+          <span *ngIf="!loading">Entrar</span>
+          <span *ngIf="loading">Carregando...</span>
         </button>
       </form>
 
       <div class="login-footer">
-        <p>Não tem uma conta? <a href="/register">Cadastre-se</a></p>
+        <p>Não tem uma conta? <a [routerLink]="'/register'" tabindex="0">Cadastre-se</a></p>
       </div>
     </div>
   </div>

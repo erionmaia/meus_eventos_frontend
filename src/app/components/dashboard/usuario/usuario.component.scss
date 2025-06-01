@@ -1,0 +1,35 @@
+.usuario-wrapper {
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 2rem 1.5rem;
+}
+.usuario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.usuario-header h2 {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  margin: 0;
+}
+.btn.btn-primary {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn.btn-primary:hover {
+  background: #ff4b4b;
+}
+.usuario-info {
+  color: var(--text-color);
+  opacity: 0.85;
+}

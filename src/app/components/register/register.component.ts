@@ -1,142 +1,126 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+
+function maskCPF(value: string): string {
+  return value
+    .replace(/\D/g, '')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+    .slice(0, 14);
+}
+
+function maskDate(value: string): string {
+  return value
+    .replace(/\D/g, '')
+    .replace(/(\d{2})(\d)/, '$1/$2')
+    .replace(/(\d{2})(\d)/, '$1/$2')
+    .slice(0, 10);
+}
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, RouterLink]
 })
 export class RegisterComponent {
-  formData = {
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    cpf: '',
-    birthdate: ''
-  };
-  cpfError: string | null = null;
-  birthdateError: string | null = null;
-  serverError: string | null = null;
-  passwordValid = {
-    length: false,
-    upper: false,
-    lower: false,
-    number: false,
-    special: false
-  };
-  confirmPasswordError: string | null = null;
+  registerForm: FormGroup;
+  loading = false;
+  error = '';
   showPassword = false;
   showConfirmPassword = false;
 
-  // Validação local do CPF (formato e dígitos verificadores)
-  validateCPF() {
-    const cpf = this.formData.cpf.replace(/\D/g, '');
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
-      this.cpfError = 'CPF inválido';
-      return false;
-    }
-    let soma = 0, resto;
-    for (let i = 1; i <= 9; i++) soma += parseInt(cpf[i - 1]) * (11 - i);
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf[9])) {
-      this.cpfError = 'CPF inválido';
-      return false;
-    }
-    soma = 0;
-    for (let i = 1; i <= 10; i++) soma += parseInt(cpf[i - 1]) * (12 - i);
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf[10])) {
-      this.cpfError = 'CPF inválido';
-      return false;
-    }
-    this.cpfError = null;
-    return true;
+  passwordTouched = false;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.registerForm = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      cpf: ['', [Validators.required, Validators.pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/)]],
+      birthDate: ['', [Validators.required, Validators.pattern(/^\d{2}\/\d{2}\/\d{4}$/)]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/)
+      ]],
+      confirmPassword: ['', [Validators.required]]
+    }, {
+      validators: this.passwordMatchValidator
+    });
   }
 
-  // Máscara para data de nascimento no formato dd/mm/aaaa
-  onBirthdateInput() {
-    let v = this.formData.birthdate.replace(/\D/g, '').slice(0, 8);
-    if (v.length >= 5) v = v.replace(/(\d{2})(\d{2})(\d{0,4})/, '$1/$2/$3');
-    else if (v.length >= 3) v = v.replace(/(\d{2})(\d{0,2})/, '$1/$2');
-    this.formData.birthdate = v;
+  // Máscara CPF
+  onCPFInput(event: any) {
+    const value = event.target.value;
+    this.registerForm.get('cpf')?.setValue(maskCPF(value), { emitEvent: false });
   }
 
-  // Validação da data de nascimento (maior de 18 anos, formato dd/mm/aaaa)
-  validateBirthdate() {
-    if (!this.formData.birthdate) {
-      this.birthdateError = 'Data de nascimento obrigatória';
-      return false;
-    }
-    const parts = this.formData.birthdate.split('/');
-    if (parts.length !== 3 || parts[0].length !== 2 || parts[1].length !== 2 || parts[2].length !== 4) {
-      this.birthdateError = 'Data inválida. Use o formato dd/mm/aaaa';
-      return false;
-    }
-    const [day, month, year] = parts.map(Number);
-    const birth = new Date(year, month - 1, day);
-    if (isNaN(birth.getTime()) || birth.getDate() !== day || birth.getMonth() !== month - 1 || birth.getFullYear() !== year) {
-      this.birthdateError = 'Data inválida.';
-      return false;
-    }
-    const today = new Date();
-    let age = today.getFullYear() - birth.getFullYear();
-    if (
-      age < 18 ||
-      (age === 18 &&
-        (today.getMonth() < birth.getMonth() ||
-          (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())))
-    ) {
-      this.birthdateError = 'Você deve ter pelo menos 18 anos';
-      return false;
-    }
-    this.birthdateError = null;
-    return true;
+  // Máscara Data
+  onBirthDateInput(event: any) {
+    const value = event.target.value;
+    this.registerForm.get('birthDate')?.setValue(maskDate(value), { emitEvent: false });
   }
 
-  validatePassword() {
-    const pwd = this.formData.password || '';
-    this.passwordValid.length = pwd.length >= 8;
-    this.passwordValid.upper = /[A-Z]/.test(pwd);
-    this.passwordValid.lower = /[a-z]/.test(pwd);
-    this.passwordValid.number = /[0-9]/.test(pwd);
-    this.passwordValid.special = /[^A-Za-z0-9]/.test(pwd);
-    this.validateConfirmPassword();
+  // Requisitos de senha
+  get passwordValue(): string {
+    return this.registerForm.get('password')?.value || '';
+  }
+  get passwordHasMinLength(): boolean {
+    return this.passwordValue.length >= 8;
+  }
+  get passwordHasUpper(): boolean {
+    return /[A-Z]/.test(this.passwordValue);
+  }
+  get passwordHasLower(): boolean {
+    return /[a-z]/.test(this.passwordValue);
+  }
+  get passwordHasNumber(): boolean {
+    return /\d/.test(this.passwordValue);
+  }
+  get passwordHasSpecial(): boolean {
+    return /[^A-Za-z0-9]/.test(this.passwordValue);
   }
 
-  validateConfirmPassword() {
-    if (!this.formData.confirmPassword) {
-      this.confirmPasswordError = null;
+  passwordMatchValidator(form: FormGroup) {
+    const password = form.get('password');
+    const confirmPassword = form.get('confirmPassword');
+    if (password?.value !== confirmPassword?.value) {
+      confirmPassword?.setErrors({ passwordMismatch: true });
+    } else {
+      confirmPassword?.setErrors(null);
+    }
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  onPasswordInput(): void {
+    this.passwordTouched = true;
+  }
+
+  onSubmit(): void {
+    if (this.registerForm.invalid) {
       return;
     }
-    if (this.formData.password !== this.formData.confirmPassword) {
-      this.confirmPasswordError = 'As senhas não coincidem';
-    } else {
-      this.confirmPasswordError = null;
-    }
-  }
-
-  togglePasswordVisibility(field: 'password' | 'confirm') {
-    if (field === 'password') {
-      this.showPassword = !this.showPassword;
-    } else {
-      this.showConfirmPassword = !this.showConfirmPassword;
-    }
-  }
-
-  // Simulação de envio para o backend
-  onSubmit() {
-    this.serverError = null;
-    this.validatePassword();
-    this.validateConfirmPassword();
-    if (
-      !this.validateCPF() ||
-      !this.validateBirthdate() ||
-      Object.values(this.passwordValid).includes(false) ||
-      this.confirmPasswordError
-    ) return;
-    // Aqui você faria a chamada HTTP para o backend
-    alert('Cadastro enviado! (Aqui faria a validação real no backend)');
+    this.loading = true;
+    this.error = '';
+    setTimeout(() => {
+      this.loading = false;
+      this.router.navigate(['/login']);
+    }, 1000);
   }
 }

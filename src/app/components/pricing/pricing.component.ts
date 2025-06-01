@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
-  styleUrls: ['./pricing.component.scss']
+  styleUrls: ['./pricing.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
-export class PricingComponent {
-  // Aqui você pode adicionar lógica adicional para manipulação dos planos
-  // como integração com sistema de pagamento, etc.
-} 
+export class PricingComponent {} 

@@ -1,70 +1,178 @@
 <section class="register-section">
   <div class="register-container">
     <div class="register-card">
-      <h1>Crie sua conta</h1>
-      <form (ngSubmit)="onSubmit()" #registerForm="ngForm" autocomplete="off">
+      <div class="register-header">
+        <h1>Criar Conta</h1>
+        <p>Preencha os dados para se cadastrar</p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-          <label for="name">Nome completo</label>
-          <input type="text" id="name" name="name" [(ngModel)]="formData.name" required placeholder="Seu nome completo">
+          <label for="name">Nome Completo</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Seu nome completo"
+            [ngClass]="{'error': registerForm.get('name')?.invalid && registerForm.get('name')?.touched}"
+          >
+          <div class="error-message" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+            <span *ngIf="registerForm.get('name')?.errors?.['required']">Nome é obrigatório</span>
+            <span *ngIf="registerForm.get('name')?.errors?.['minlength']">Nome deve ter no mínimo 3 caracteres</span>
+          </div>
         </div>
+
         <div class="form-group">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" [(ngModel)]="formData.email" required placeholder="Seu e-mail">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="Seu email"
+            [ngClass]="{'error': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}"
+          >
+          <div class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+            <span *ngIf="registerForm.get('email')?.errors?.['required']">Email é obrigatório</span>
+            <span *ngIf="registerForm.get('email')?.errors?.['email']">Email inválido</span>
+          </div>
         </div>
+
+        <div class="form-group">
+          <label for="cpf">CPF</label>
+          <input 
+            type="text" 
+            id="cpf" 
+            formControlName="cpf" 
+            placeholder="000.000.000-00"
+            (input)="onCPFInput($event)"
+            [ngClass]="{'error': registerForm.get('cpf')?.invalid && registerForm.get('cpf')?.touched}"
+          >
+          <div class="error-message" *ngIf="registerForm.get('cpf')?.invalid && registerForm.get('cpf')?.touched">
+            <span *ngIf="registerForm.get('cpf')?.errors?.['required']">CPF é obrigatório</span>
+            <span *ngIf="registerForm.get('cpf')?.errors?.['pattern']">CPF inválido</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="birthDate">Data de Nascimento</label>
+          <input 
+            type="text" 
+            id="birthDate" 
+            formControlName="birthDate" 
+            placeholder="dd/mm/aaaa"
+            (input)="onBirthDateInput($event)"
+            [ngClass]="{'error': registerForm.get('birthDate')?.invalid && registerForm.get('birthDate')?.touched}"
+          >
+          <div class="error-message" *ngIf="registerForm.get('birthDate')?.invalid && registerForm.get('birthDate')?.touched">
+            <span *ngIf="registerForm.get('birthDate')?.errors?.['required']">Data de nascimento é obrigatória</span>
+            <span *ngIf="registerForm.get('birthDate')?.errors?.['pattern']">Data inválida</span>
+          </div>
+        </div>
+
         <div class="form-group">
           <label for="password">Senha</label>
           <div class="password-input">
-            <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="formData.password" required minlength="8" placeholder="Crie uma senha" (input)="validatePassword()">
-            <button type="button" class="toggle-password" (click)="togglePasswordVisibility('password')">
-              <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              id="password" 
+              formControlName="password" 
+              placeholder="Sua senha"
+              (input)="onPasswordInput()"
+              [ngClass]="{'error': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}"
+            >
+            <button 
+              type="button" 
+              class="toggle-password" 
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+            >
+              <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
             </button>
+          </div>
+          <div class="password-info">
+            <span>Para sua segurança, a senha deve conter:</span>
           </div>
           <ul class="password-requirements">
-            <li [ngClass]="{'valid': passwordValid.length, 'invalid': !passwordValid.length}">
-              <span class="icon" [ngClass]="{'check': passwordValid.length, 'cross': !passwordValid.length}"></span>
+            <li [class.valid]="passwordHasMinLength" [class.invalid]="!passwordHasMinLength">
+              <span class="icon">
+                <i [ngClass]="passwordHasMinLength ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+              </span>
               Mínimo 8 caracteres
             </li>
-            <li [ngClass]="{'valid': passwordValid.upper, 'invalid': !passwordValid.upper}">
-              <span class="icon" [ngClass]="{'check': passwordValid.upper, 'cross': !passwordValid.upper}"></span>
-              Pelo menos uma letra maiúscula
+            <li [class.valid]="passwordHasUpper" [class.invalid]="!passwordHasUpper">
+              <span class="icon">
+                <i [ngClass]="passwordHasUpper ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+              </span>
+              Letra maiúscula
             </li>
-            <li [ngClass]="{'valid': passwordValid.lower, 'invalid': !passwordValid.lower}">
-              <span class="icon" [ngClass]="{'check': passwordValid.lower, 'cross': !passwordValid.lower}"></span>
-              Pelo menos uma letra minúscula
+            <li [class.valid]="passwordHasLower" [class.invalid]="!passwordHasLower">
+              <span class="icon">
+                <i [ngClass]="passwordHasLower ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+              </span>
+              Letra minúscula
             </li>
-            <li [ngClass]="{'valid': passwordValid.number, 'invalid': !passwordValid.number}">
-              <span class="icon" [ngClass]="{'check': passwordValid.number, 'cross': !passwordValid.number}"></span>
-              Pelo menos um número
+            <li [class.valid]="passwordHasNumber" [class.invalid]="!passwordHasNumber">
+              <span class="icon">
+                <i [ngClass]="passwordHasNumber ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+              </span>
+              Número
             </li>
-            <li [ngClass]="{'valid': passwordValid.special, 'invalid': !passwordValid.special}">
-              <span class="icon" [ngClass]="{'check': passwordValid.special, 'cross': !passwordValid.special}"></span>
-              Pelo menos um caractere especial
+            <li [class.valid]="passwordHasSpecial" [class.invalid]="!passwordHasSpecial">
+              <span class="icon">
+                <i [ngClass]="passwordHasSpecial ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
+              </span>
+              Caractere especial
             </li>
           </ul>
+          <div class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+            <span *ngIf="registerForm.get('password')?.errors?.['required']">Senha é obrigatória</span>
+            <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Senha deve ter no mínimo 8 caracteres</span>
+            <span *ngIf="registerForm.get('password')?.errors?.['pattern']">Senha deve conter letra maiúscula, minúscula, número e caractere especial</span>
+          </div>
         </div>
+
         <div class="form-group">
-          <label for="confirmPassword">Confirme a senha</label>
+          <label for="confirmPassword">Confirmar Senha</label>
           <div class="password-input">
-            <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" name="confirmPassword" [(ngModel)]="formData.confirmPassword" required (input)="validateConfirmPassword()">
-            <button type="button" class="toggle-password" (click)="togglePasswordVisibility('confirm')">
-              <i class="fas" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword"></i>
+            <input 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              id="confirmPassword" 
+              formControlName="confirmPassword" 
+              placeholder="Confirme sua senha"
+              [ngClass]="{'error': registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched}"
+            >
+            <button 
+              type="button" 
+              class="toggle-password" 
+              (click)="toggleConfirmPasswordVisibility()"
+              [attr.aria-label]="showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'"
+            >
+              <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
             </button>
           </div>
-          <div class="error" *ngIf="confirmPasswordError">{{ confirmPasswordError }}</div>
+          <div class="error-message" *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+            <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Confirmação de senha é obrigatória</span>
+            <span *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']">As senhas não coincidem</span>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="cpf">CPF</label>
-          <input type="text" id="cpf" name="cpf" [(ngModel)]="formData.cpf" required maxlength="14" placeholder="Seu CPF" (blur)="validateCPF()">
-          <div class="error" *ngIf="cpfError">{{ cpfError }}</div>
+
+        <div class="error-message" *ngIf="error">
+          {{ error }}
         </div>
-        <div class="form-group">
-          <label for="birthdate">Data de nascimento</label>
-          <input type="text" id="birthdate" name="birthdate" [(ngModel)]="formData.birthdate" required maxlength="10" placeholder="dd/mm/aaaa" (input)="onBirthdateInput()" (blur)="validateBirthdate()">
-          <div class="error" *ngIf="birthdateError">{{ birthdateError }}</div>
-        </div>
-        <button type="submit" [disabled]="registerForm.invalid || cpfError || birthdateError">Cadastrar</button>
-        <div class="error" *ngIf="serverError">{{ serverError }}</div>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="registerForm.invalid || loading"
+        >
+          <span *ngIf="!loading">Cadastrar</span>
+          <span *ngIf="loading">Carregando...</span>
+        </button>
       </form>
+
+      <div class="register-footer">
+        <p>Já tem uma conta? <a [routerLink]="'/login'" tabindex="0">Faça login</a></p>
+      </div>
     </div>
   </div>
 </section>

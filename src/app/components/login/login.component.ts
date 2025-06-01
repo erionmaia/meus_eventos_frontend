@@ -1,56 +1,58 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-
-interface LoginData {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, RouterLink]
 })
 export class LoginComponent {
-  loginData: LoginData = {
-    email: '',
-    password: '',
-    rememberMe: false
-  };
-
+  loginForm: FormGroup;
+  loading = false;
+  error = '';
   showPassword = false;
-  isLoading = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
-  async onSubmit(): Promise<void> {
-    if (this.isLoading) return;
-
-    try {
-      this.isLoading = true;
-      // TODO: Implement your login logic here
-      // Example:
-      // const response = await this.authService.login(this.loginData);
-      // if (response.success) {
-      //   this.router.navigate(['/dashboard']);
-      // }
-      
-      // Temporary navigation for testing
-      this.router.navigate(['/dashboard']);
-    } catch (error) {
-      console.error('Login error:', error);
-      // TODO: Implement error handling
-    } finally {
-      this.isLoading = false;
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      return;
     }
+
+    this.loading = true;
+    this.error = '';
+
+    const { email, password } = this.loginForm.value;
+
+    this.authService.login(email, password).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.error = 'Email ou senha inválidos';
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
   }
 } 
