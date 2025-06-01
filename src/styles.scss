@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
-// Variáveis de cores para tema claro
+/* Variáveis de cores para tema claro */
 :root {
   --primary-color: #FF6B6B;
   --secondary-color: #4ECDC4;
@@ -14,7 +14,7 @@
   --font-family: 'Montserrat', sans-serif;
 }
 
-// Variáveis de cores para tema escuro
+/* Variáveis de cores para tema escuro */
 .dark-theme {
   --primary-color: #FF6B6B;
   --secondary-color: #4ECDC4;
@@ -26,7 +26,7 @@
   --border-color: #404040;
 }
 
-// Reset e estilos base
+/* Reset e estilos base */
 html, body {
   margin: 0;
   padding: 0;
@@ -39,7 +39,7 @@ html, body {
   box-sizing: inherit;
 }
 
-// Estilos gerais
+/* Estilos gerais */
 body {
   font-family: var(--font-family);
   background-color: var(--background-color);
@@ -50,22 +50,22 @@ body {
   flex-direction: column;
 }
 
-// Aplicar transição suave para todas as propriedades que mudam com o tema
+/* Aplicar transição suave para todas as propriedades que mudam com o tema */
 * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-// Garantir que todos os elementos usem a mesma cor de texto
+/* Garantir que todos os elementos usem a mesma cor de texto */
 h1, h2, h3, h4, h5, h6, p, a, span, li, label, input, textarea {
   color: var(--text-color);
 }
 
-// Exceção apenas para links quando hover
+/* Exceção apenas para links quando hover */
 a:hover {
   color: var(--primary-color);
 }
 
-// Garantir que cards e seções usem as cores corretas
+/* Garantir que cards e seções usem as cores corretas */
 .card, section {
   background-color: var(--card-bg);
   border-color: var(--border-color);
@@ -73,7 +73,7 @@ a:hover {
   max-width: 100%;
 }
 
-// Container principal
+/* Container principal */
 app-root {
   display: flex;
   flex-direction: column;

@@ -1,6 +1,6 @@
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
-// Variáveis de cores
+/* Variáveis de cores */
 :root {
   --primary-color: #FF6B6B;
   --secondary-color: #4ECDC4;
@@ -25,14 +25,14 @@
   --border-color: #404040;
 }
 
-// Estilos comuns
+/* Estilos comuns */
 body {
   background-color: var(--background-color);
   color: var(--text-color);
   transition: all 0.3s ease;
 }
 
-// Classes utilitárias
+/* Classes utilitárias */
 .section {
   padding: 4rem 2rem;
   background-color: var(--background-color);
@@ -76,7 +76,7 @@ body {
   text-align: center;
 }
 
-// Responsividade
+/* Responsividade */
 @media (max-width: 768px) {
   .section {
     padding: 2rem 1rem;

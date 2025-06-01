@@ -1,10 +1,10 @@
-// Grid utilities
+/* Grid utilities */
 .grid {
   display: grid;
   gap: 2rem;
 }
 
-// Card styles
+/* Card styles */
 .card {
   background: var(--card-bg);
   border-radius: 8px;
@@ -12,12 +12,12 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-// Text utilities
+/* Text utilities */
 .text-center {
   text-align: center;
 }
 
-// Container
+/* Container */
 .container {
   width: 100%;
   max-width: 1200px;
@@ -25,7 +25,7 @@
   padding: 0 1rem;
 }
 
-// Media queries
+/* Media queries */
 @media (max-width: 768px) {
   .container {
     padding: 0 0.5rem;
