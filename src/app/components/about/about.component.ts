@@ -12,7 +12,7 @@ export class AboutComponent implements OnInit {
   isDarkTheme = false;
   private glide: any;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     // Inicialização do tema
@@ -22,5 +22,4 @@ export class AboutComponent implements OnInit {
       document.body.classList.add('dark-theme');
     }
   }
-
 }
