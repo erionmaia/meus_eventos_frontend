@@ -32,8 +32,13 @@ export class AuthService {
 
   private loadStoredUser(): void {
     const userData = localStorage.getItem(this.USER_KEY);
-    if (userData) {
-      this.userSubject.next(JSON.parse(userData));
+    try {
+      if (userData && userData !== 'undefined') {
+        this.userSubject.next(JSON.parse(userData));
+      }
+    } catch (e) {
+      localStorage.removeItem(this.USER_KEY);
+      this.userSubject.next(null);
     }
   }
 
@@ -55,36 +60,11 @@ export class AuthService {
     return new Date().getTime() < parseInt(expiry);
   }
 
-  public login(email: string, password: string): Observable<AuthResponse> {
-    // TODO: Implementar chamada real à API
-    // Simulação de resposta da API
-    return new Observable(observer => {
-      setTimeout(() => {
-        const response: AuthResponse = {
-          user: {
-            id: 1,
-            name: 'Usuário Teste',
-            email: email,
-            role: 'user'
-          },
-          token: 'fake-jwt-token',
-          expiresIn: 3600 // 1 hora
-        };
-        
-        this.setSession(response);
-        observer.next(response);
-        observer.complete();
-      }, 1000);
-    });
-  }
-
-  private setSession(authResult: AuthResponse): void {
+  public setSession(authResult: AuthResponse): void {
     const expiresAt = new Date().getTime() + (authResult.expiresIn * 1000);
-    
     localStorage.setItem(this.TOKEN_KEY, authResult.token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(authResult.user));
     localStorage.setItem(this.TOKEN_EXPIRY_KEY, expiresAt.toString());
-    
     this.userSubject.next(authResult.user);
   }
 

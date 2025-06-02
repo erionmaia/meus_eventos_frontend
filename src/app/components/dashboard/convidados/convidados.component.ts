@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-convidados',
   templateUrl: './convidados.component.html',
-  styleUrls: ['./convidados.component.scss']
+  styleUrls: ['./convidados.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
-export class ConvidadosComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class ConvidadosComponent { }

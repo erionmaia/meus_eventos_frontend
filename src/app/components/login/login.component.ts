@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { LoginService } from '../../services/login.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -19,12 +20,13 @@ export class LoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
+    private loginService: LoginService,
     private authService: AuthService,
     private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required]]
     });
   }
 
@@ -42,8 +44,10 @@ export class LoginComponent {
 
     const { email, password } = this.loginForm.value;
 
-    this.authService.login(email, password).subscribe({
-      next: () => {
+    this.loginService.login(email, password).subscribe({
+      next: (response) => {
+        console.log('response: ', response);
+        this.authService.setSession(response);
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
