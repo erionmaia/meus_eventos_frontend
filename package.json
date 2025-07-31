@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && ./copy-config-files.sh",
+    "build:prod": "ng build --configuration production && ./copy-config-files.sh",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
