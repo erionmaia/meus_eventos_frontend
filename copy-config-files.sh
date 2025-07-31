@@ -3,7 +3,7 @@
 echo "📁 Copiando arquivos de configuração para o build..."
 
 # Aguardar um pouco para garantir que o build terminou
-sleep 2
+sleep 3
 
 # Verificar se o build existe
 if [ ! -d "dist/meuseventos" ]; then
@@ -12,9 +12,6 @@ if [ ! -d "dist/meuseventos" ]; then
 fi
 
 # Copiar arquivos de configuração
-echo "Copiando _redirects..."
-cp src/_redirects dist/meuseventos/
-
 echo "📋 Copiando _redirects..."
 cp _redirects dist/meuseventos/
 
