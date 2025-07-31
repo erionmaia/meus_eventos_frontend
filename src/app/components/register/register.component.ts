@@ -1,7 +1,26 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
+/*
+  REGISTER COMPONENT - CÓDIGO ORIGINAL COMENTADO
+  ===============================================
+  
+  Este componente estava implementado com:
+  - Formulário reativo completo com FormBuilder
+  - Validações customizadas para CPF, data de nascimento, senha
+  - Máscaras de input (CPF e data)
+  - Validação de requisitos de senha em tempo real
+  - Integração com AuthService para registro
+  - Toggle de visibilidade de senha
+  - Validação de confirmação de senha
+  
+  Código preservado para uso futuro quando necessário.
+*/
+
+/*
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 function maskCPF(value: string): string {
@@ -21,20 +40,12 @@ function maskDate(value: string): string {
     .slice(0, 10);
 }
 
-@Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, RouterLink]
-})
 export class RegisterComponent {
   registerForm: FormGroup;
   loading = false;
   error = '';
   showPassword = false;
   showConfirmPassword = false;
-
   passwordTouched = false;
 
   constructor(
@@ -123,4 +134,17 @@ export class RegisterComponent {
       this.router.navigate(['/login']);
     }, 1000);
   }
+}
+*/
+
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
+  standalone: true,
+  imports: [CommonModule, RouterModule]
+})
+export class RegisterComponent {
+  // Componente simplificado para página de manutenção
+  // Não há lógica necessária para a página de manutenção
 }
