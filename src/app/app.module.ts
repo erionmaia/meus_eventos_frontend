@@ -18,7 +18,6 @@ import { UsuarioComponent } from './components/dashboard/usuario/usuario.compone
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/auth.guard';
 import { AuthInterceptor } from './services/auth.interceptor';
-import { NotificationComponent } from './components/notification/notification.component';
 import { routes } from './app.routes';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -33,8 +32,7 @@ import { FooterComponent } from './components/footer/footer.component';
     ConvitesComponent,
     SitesComponent,
     UsuarioComponent,
-    FooterComponent,
-    NotificationComponent
+    FooterComponent
   ],
   imports: [
     BrowserModule,

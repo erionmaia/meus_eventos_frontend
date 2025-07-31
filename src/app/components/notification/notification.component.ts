@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotificationService, Notification } from '../../services/notification.service';
 
 @Component({
   selector: 'app-notification',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <div class="notification-container" *ngIf="notifications.length > 0">
       <div 
