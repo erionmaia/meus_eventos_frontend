@@ -2,6 +2,9 @@
 
 echo "📁 Copiando arquivos de configuração para o build..."
 
+# Aguardar um pouco para garantir que o build terminou
+sleep 2
+
 # Verificar se o build existe
 if [ ! -d "dist/meuseventos" ]; then
     echo "❌ Diretório dist/meuseventos não encontrado. Execute 'npm run build' primeiro."
@@ -9,6 +12,9 @@ if [ ! -d "dist/meuseventos" ]; then
 fi
 
 # Copiar arquivos de configuração
+echo "Copiando _redirects..."
+cp src/_redirects dist/meuseventos/
+
 echo "📋 Copiando _redirects..."
 cp _redirects dist/meuseventos/
 
