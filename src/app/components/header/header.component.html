@@ -4,29 +4,71 @@
       <img [src]="isDarkTheme ? 'assets/images/Prancheta 6-8-menor.png' : 'assets/images/Prancheta 2-8-menor.png'" alt="Logo">
     </div>
     
+    <div class="nav-links">
+      <a routerLink="/home" (click)="closeMenu()">Home</a>
+      <a routerLink="/about" (click)="closeMenu()">Sobre</a>
+      <a routerLink="/pricing" (click)="closeMenu()">Planos</a>
+      <a routerLink="/services" (click)="closeMenu()">Serviços</a>
+      <a routerLink="/contact" (click)="closeMenu()">Contato</a>
+      <a routerLink="/dashboard" *ngIf="isLoggedIn" (click)="closeMenu()">Dashboard</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="theme-toggle">
+        <button (click)="toggleTheme()">
+          <i [class]="isDarkTheme ? 'fas fa-sun' : 'fas fa-moon'"></i>
+        </button>
+      </div>
+      
+      <!-- Área do usuário logado -->
+      <div class="user-section" *ngIf="isLoggedIn">
+        <div class="user-info">
+          <span class="user-name">{{ userName }}</span>
+          <img [src]="userAvatar" alt="Avatar" class="user-avatar">
+        </div>
+        <button class="logout-btn" (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+      
+      <!-- Botão de login quando não logado -->
+      <a routerLink="/login" class="login-btn" *ngIf="!isLoggedIn" (click)="closeMenu()">Login</a>
+    </div>
+
     <button class="menu-toggle" [class.active]="isMenuOpen" (click)="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>
     </button>
+  </nav>
 
-    <div class="nav-container" [class.active]="isMenuOpen">
-      <div class="nav-links">
+  <!-- Overlay para o menu mobile -->
+  <div class="mobile-overlay" [class.active]="isMenuOpen" (click)="closeMenu()"></div>
+
+  <!-- Menu Mobile -->
+  <div class="mobile-menu" [class.active]="isMenuOpen">
+    <div class="mobile-menu-content">
+      <div class="mobile-nav-links">
         <a routerLink="/home" (click)="closeMenu()">Home</a>
         <a routerLink="/about" (click)="closeMenu()">Sobre</a>
         <a routerLink="/pricing" (click)="closeMenu()">Planos</a>
         <a routerLink="/services" (click)="closeMenu()">Serviços</a>
         <a routerLink="/contact" (click)="closeMenu()">Contato</a>
+        <a routerLink="/dashboard" *ngIf="isLoggedIn" (click)="closeMenu()">Dashboard</a>
       </div>
-      <div class="nav-right">
-        <div class="theme-toggle">
-          <button (click)="toggleTheme()">
-            <i [class]="isDarkTheme ? 'fas fa-sun' : 'fas fa-moon'"></i>
-            <span>{{ isDarkTheme ? ' Claro' : ' Escuro' }}</span>
-          </button>
+      
+      <div class="mobile-user-section" *ngIf="isLoggedIn">
+        <div class="mobile-user-info">
+          <img [src]="userAvatar" alt="Avatar" class="mobile-user-avatar">
+          <span class="mobile-user-name">{{ userName }}</span>
         </div>
-        <a routerLink="/login" class="login-btn" (click)="closeMenu()">Login</a>
+        <button class="mobile-logout-btn" (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </button>
       </div>
+      
+      <a routerLink="/login" class="mobile-login-btn" *ngIf="!isLoggedIn" (click)="closeMenu()">Login</a>
     </div>
-  </nav>
+  </div>
 </header>

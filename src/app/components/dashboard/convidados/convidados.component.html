@@ -1,9 +1,275 @@
 <div class="convidados-wrapper">
   <div class="convidados-header">
-    <h2>Meus Convidados</h2>
-    <button class="btn btn-primary">+ Novo Convidado</button>
+    <h2>{{ getHeaderTitle() }}</h2>
+    <button class="btn btn-primary" (click)="toggleForm()" *ngIf="!showForm">
+      {{ showForm ? 'Cancelar' : '+ Novo Convidado' }}
+    </button>
   </div>
-  <div class="convidados-lista">
-    <p>Nenhum convidado cadastrado ainda.</p>
+
+  <!-- Mensagens de feedback -->
+  <div class="alert alert-success" *ngIf="success" (click)="success = ''">
+    {{ success }}
+  </div>
+  <div class="alert alert-danger" *ngIf="error" (click)="error = ''">
+    {{ error }}
+  </div>
+
+  <!-- Formulário de criação/edição de convidado -->
+  <div class="convidados-form" *ngIf="showForm">
+    <form [formGroup]="convidadosForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Nome do Convidado *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Digite o nome do convidado"
+            [class.invalid]="convidadosForm.get('name')?.invalid && convidadosForm.get('name')?.touched"
+          >
+          <div class="error-message" *ngIf="convidadosForm.get('name')?.invalid && convidadosForm.get('name')?.touched">
+            <span *ngIf="convidadosForm.get('name')?.errors?.['required']">Nome é obrigatório</span>
+            <span *ngIf="convidadosForm.get('name')?.errors?.['minlength']">Nome deve ter pelo menos 3 caracteres</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="Digite o e-mail do convidado"
+          >
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Telefone</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone" 
+            placeholder="Digite o telefone do convidado"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="groupId">Grupo</label>
+          <select 
+            id="groupId" 
+            formControlName="groupId"
+          >
+            <option value="">Selecione um grupo</option>
+            <option value="1">Família</option>
+            <option value="2">Amigos</option>
+            <option value="3">Trabalho</option>
+            <option value="4">Outros</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="eventId">Evento *</label>
+        <select 
+          id="eventId" 
+          formControlName="eventId"
+          [class.invalid]="convidadosForm.get('eventId')?.invalid && convidadosForm.get('eventId')?.touched"
+        >
+          <option value="">Selecione o evento</option>
+          <option *ngFor="let evento of eventos" [value]="evento.id">
+            {{ evento.titulo }} - {{ formatarData(evento.data) }}
+          </option>
+        </select>
+        <div class="error-message" *ngIf="convidadosForm.get('eventId')?.invalid && convidadosForm.get('eventId')?.touched">
+          <span *ngIf="convidadosForm.get('eventId')?.errors?.['required']">Evento é obrigatório</span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="toggleForm()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="loading || convidadosForm.invalid">
+          {{ loading ? 'Salvando...' : (isEditing ? 'Atualizar Convidado' : 'Adicionar Convidado') }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de convidados - apenas quando o formulário não estiver aberto -->
+  <div class="convidados-lista" *ngIf="!showForm && !loading">
+    <!-- Filtro por evento -->
+    <div class="filtro-eventos">
+      <div class="filtro-header">
+        <h3>Filtrar por Evento</h3>
+        <button class="btn btn-secondary btn-small" (click)="limparFiltro()" *ngIf="eventoSelecionado">
+          Limpar Filtro
+        </button>
+      </div>
+      <div class="filtro-opcoes">
+        <label class="radio-option">
+          <input type="radio" name="filtroEvento" [checked]="mostrarTodosEventos" (change)="mostrarTodosEventos = true; eventoSelecionado = ''">
+          <span>Todos os Eventos</span>
+        </label>
+        <div class="evento-opcoes">
+          <label class="radio-option" *ngFor="let evento of eventos">
+            <input type="radio" name="filtroEvento" [value]="evento.id" [checked]="eventoSelecionado === evento.id" (change)="eventoSelecionado = evento.id; onEventoChange()">
+            <span>{{ evento.titulo }} - {{ formatarData(evento.data) }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros e estatísticas -->
+    <div class="convidados-stats">
+      <div class="stat-item">
+        <span class="stat-number">{{ getConvidadosFiltrados().length }}</span>
+        <span class="stat-label">Total de Convidados</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ getConvidadosConfirmados() }}</span>
+        <span class="stat-label">Confirmados</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ getConvidadosPendentes() }}</span>
+        <span class="stat-label">Pendentes</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ getConvidadosEnviados() }}</span>
+        <span class="stat-label">Convites Enviados</span>
+      </div>
+    </div>
+
+    <!-- Visualização agrupada por evento -->
+    <div class="convidados-agrupados" *ngIf="mostrarTodosEventos && convidadosPorEvento.length > 0">
+      <div class="grupo-evento" *ngFor="let grupo of convidadosPorEvento">
+        <div class="grupo-header">
+          <h3>{{ grupo.evento.titulo }}</h3>
+          <span class="evento-data">{{ formatarData(grupo.evento.data) }}</span>
+          <span class="convidados-count">{{ grupo.convidados.length }} convidado(s)</span>
+        </div>
+        
+        <div class="convidados-grid">
+          <div class="convidado-card" *ngFor="let convidado of grupo.convidados" (click)="editarConvidado(convidado)">
+            <div class="convidado-header">
+              <div class="convidado-info">
+                <h4>{{ convidado.name }}</h4>
+                <div class="convidado-meta">
+                  <span class="email" *ngIf="convidado.email">{{ convidado.email }}</span>
+                  <span class="phone" *ngIf="convidado.phone">{{ convidado.phone }}</span>
+                </div>
+              </div>
+              <div class="convidado-actions">
+                <span class="status-badge" [class]="getStatusClass(convidado)">
+                  {{ getStatusText(convidado) }}
+                </span>
+                <button class="btn-icon" (click)="deletarConvidado(convidado.id!); $event.stopPropagation()" title="Deletar convidado">
+                  🗑️
+                </button>
+              </div>
+            </div>
+            
+            <div class="convidado-details">
+              <div class="detail-item">
+                <strong>Grupo:</strong> {{ getGrupoText(convidado.groupId) }}
+              </div>
+              <div class="detail-item" *ngIf="convidado.sentAt">
+                <strong>Convite enviado:</strong> {{ formatarData(convidado.sentAt) }}
+              </div>
+            </div>
+
+            <!-- Ações rápidas -->
+            <div class="convidado-quick-actions">
+              <button class="btn btn-primary" 
+                      [class.btn-success]="convidado.confirmed" 
+                      [class.btn-warning]="!convidado.confirmed"
+                      (click)="toggleConfirmacao(convidado); $event.stopPropagation()">
+                {{ convidado.confirmed ? '✓ Confirmado' : 'Confirmar Presença' }}
+              </button>
+              <button class="btn btn-primary" 
+                      *ngIf="!convidado.sent"
+                      (click)="enviarConvite(convidado); $event.stopPropagation()">
+                Enviar Convite
+              </button>
+              <button class="btn btn-primary" 
+                      *ngIf="convidado.sent && !convidado.confirmed"
+                      (click)="reenviarConvite(convidado); $event.stopPropagation()">
+                Reenviar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista simples quando filtrado por evento específico -->
+    <div class="convidados-simples" *ngIf="!mostrarTodosEventos && getConvidadosFiltrados().length > 0">
+      <div class="convidado-card" *ngFor="let convidado of getConvidadosFiltrados()" (click)="editarConvidado(convidado)">
+        <div class="convidado-header">
+          <div class="convidado-info">
+            <h3>{{ convidado.name }}</h3>
+            <div class="convidado-meta">
+              <span class="email" *ngIf="convidado.email">{{ convidado.email }}</span>
+              <span class="phone" *ngIf="convidado.phone">{{ convidado.phone }}</span>
+            </div>
+          </div>
+          <div class="convidado-actions">
+            <span class="status-badge" [class]="getStatusClass(convidado)">
+              {{ getStatusText(convidado) }}
+            </span>
+            <button class="btn-icon" (click)="deletarConvidado(convidado.id!); $event.stopPropagation()" title="Deletar convidado">
+              🗑️
+            </button>
+          </div>
+        </div>
+        
+        <div class="convidado-details">
+          <div class="detail-item">
+            <strong>Grupo:</strong> {{ getGrupoText(convidado.groupId) }}
+          </div>
+          <div class="detail-item" *ngIf="convidado.sentAt">
+            <strong>Convite enviado:</strong> {{ formatarData(convidado.sentAt) }}
+          </div>
+          <div class="detail-item" *ngIf="convidado.sendMethod">
+            <strong>Método:</strong> {{ convidado.sendMethod === 'email' ? 'E-mail' : 'SMS' }}
+          </div>
+        </div>
+
+        <!-- Ações rápidas -->
+        <div class="convidado-quick-actions">
+          <button class="btn btn-primary" 
+                  [class.btn-success]="convidado.confirmed" 
+                  [class.btn-warning]="!convidado.confirmed"
+                  (click)="toggleConfirmacao(convidado); $event.stopPropagation()">
+            {{ convidado.confirmed ? '✓ Confirmado' : 'Confirmar Presença' }}
+          </button>
+          <button class="btn btn-primary" 
+                  *ngIf="!convidado.sent"
+                  (click)="enviarConvite(convidado); $event.stopPropagation()">
+            Enviar Convite
+          </button>
+          <button class="btn btn-primary" 
+                  *ngIf="convidado.sent && !convidado.confirmed"
+                  (click)="reenviarConvite(convidado); $event.stopPropagation()">
+            Reenviar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="getConvidadosFiltrados().length === 0">
+      <div class="empty-icon">👥</div>
+      <h3>Nenhum convidado encontrado</h3>
+      <p *ngIf="mostrarTodosEventos">Clique em "Novo Convidado" para adicionar seus primeiros convidados!</p>
+      <p *ngIf="!mostrarTodosEventos">Nenhum convidado encontrado para o evento selecionado.</p>
+    </div>
+  </div>
+
+  <!-- Loading state - apenas quando não estiver mostrando o formulário -->
+  <div class="loading-state" *ngIf="loading && !showForm">
+    <div class="spinner"></div>
+    <p>Carregando convidados...</p>
   </div>
 </div>

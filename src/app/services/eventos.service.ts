@@ -26,8 +26,43 @@ export class EventosService {
 
   // Listar todos os eventos do usuário
   getEventos(): Observable<Evento[]> {
-    return this.http.get<Evento[]>(this.apiUrl)
-      .pipe(catchError(this.handleError));
+    // TEMPORÁRIO: Mock de dados para testes
+    console.log('EventosService: Retornando dados mock');
+    
+    const mockEventos: Evento[] = [
+      {
+        id: '1',
+        titulo: 'Aniversário da Maria',
+        descricao: 'Festa de aniversário da Maria com tema tropical',
+        data: '2024-02-15',
+        hora: '19:00',
+        local: 'Casa da Maria',
+        tipo: 'aniversario',
+        status: 'ativo',
+        userId: '1'
+      },
+      {
+        id: '2',
+        titulo: 'Reunião Corporativa',
+        descricao: 'Reunião trimestral da empresa',
+        data: '2024-02-20',
+        hora: '14:00',
+        local: 'Sala de Conferências',
+        tipo: 'corporativo',
+        status: 'ativo',
+        userId: '1'
+      }
+    ];
+    
+    return new Observable(observer => {
+      setTimeout(() => {
+        observer.next(mockEventos);
+        observer.complete();
+      }, 500); // Simular delay de rede
+    });
+    
+    // Descomente a linha abaixo quando quiser usar o backend real
+    // return this.http.get<Evento[]>(this.apiUrl).pipe(catchError(this.handleError));
   }
 
   // Buscar evento por ID
@@ -38,20 +73,64 @@ export class EventosService {
 
   // Criar novo evento
   criarEvento(evento: Evento): Observable<Evento> {
-    return this.http.post<Evento>(this.apiUrl, evento)
-      .pipe(catchError(this.handleError));
+    // TEMPORÁRIO: Mock para testes
+    console.log('EventosService: Criando evento mock:', evento);
+    
+    const novoEvento: Evento = {
+      ...evento,
+      id: Date.now().toString(), // Gerar ID único
+      status: evento.status || 'ativo',
+      userId: evento.userId || '1'
+    };
+    
+    return new Observable(observer => {
+      setTimeout(() => {
+        observer.next(novoEvento);
+        observer.complete();
+      }, 300); // Simular delay de rede
+    });
+    
+    // Descomente a linha abaixo quando quiser usar o backend real
+    // return this.http.post<Evento>(this.apiUrl, evento).pipe(catchError(this.handleError));
   }
 
   // Atualizar evento
   atualizarEvento(id: string, evento: Evento): Observable<Evento> {
-    return this.http.put<Evento>(`${this.apiUrl}/${id}`, evento)
-      .pipe(catchError(this.handleError));
+    // TEMPORÁRIO: Mock para testes
+    console.log('EventosService: Atualizando evento mock:', { id, evento });
+    
+    const eventoAtualizado: Evento = {
+      ...evento,
+      id: id,
+      status: evento.status || 'ativo',
+      userId: evento.userId || '1'
+    };
+    
+    return new Observable(observer => {
+      setTimeout(() => {
+        observer.next(eventoAtualizado);
+        observer.complete();
+      }, 300); // Simular delay de rede
+    });
+    
+    // Descomente a linha abaixo quando quiser usar o backend real
+    // return this.http.put<Evento>(`${this.apiUrl}/${id}`, evento).pipe(catchError(this.handleError));
   }
 
   // Deletar evento
   deletarEvento(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`)
-      .pipe(catchError(this.handleError));
+    // TEMPORÁRIO: Mock para testes
+    console.log('EventosService: Deletando evento mock com ID:', id);
+    
+    return new Observable(observer => {
+      setTimeout(() => {
+        observer.next({ success: true, message: 'Evento deletado com sucesso' });
+        observer.complete();
+      }, 200); // Simular delay de rede
+    });
+    
+    // Descomente a linha abaixo quando quiser usar o backend real
+    // return this.http.delete(`${this.apiUrl}/${id}`).pipe(catchError(this.handleError));
   }
 
   // Buscar eventos por status

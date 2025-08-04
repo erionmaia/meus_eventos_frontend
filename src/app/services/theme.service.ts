@@ -8,6 +8,9 @@ export class ThemeService {
   private isDarkTheme = new BehaviorSubject<boolean>(false);
   isDarkTheme$ = this.isDarkTheme.asObservable();
 
+  private isEventFormOpen = new BehaviorSubject<boolean>(false);
+  isEventFormOpen$ = this.isEventFormOpen.asObservable();
+
   constructor() {
     // Inicializa o tema com base no localStorage
     const savedTheme = localStorage.getItem('theme');
@@ -28,5 +31,9 @@ export class ThemeService {
 
   toggleTheme(): void {
     this.setDarkTheme(!this.isDarkTheme.value);
+  }
+
+  setEventFormOpen(isOpen: boolean): void {
+    this.isEventFormOpen.next(isOpen);
   }
 } 

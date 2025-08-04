@@ -1,9 +1,156 @@
 <div class="eventos-wrapper">
   <div class="eventos-header">
-    <h2>Meus Eventos</h2>
-    <button class="btn btn-primary">+ Novo Evento</button>
+    <h2>{{ getHeaderTitle() }}</h2>
+    <button class="btn btn-primary" (click)="toggleForm()" *ngIf="!showForm">
+      {{ showForm ? 'Cancelar' : '+ Novo Evento' }}
+    </button>
   </div>
-  <div class="eventos-lista">
-    <p>Nenhum evento cadastrado ainda.</p>
+
+  <!-- Mensagens de feedback -->
+  <div class="alert alert-success" *ngIf="success" (click)="success = ''">
+    {{ success }}
+  </div>
+  <div class="alert alert-danger" *ngIf="error" (click)="error = ''">
+    {{ error }}
+  </div>
+
+  <!-- Formulário de criação/edição -->
+  <div class="evento-form" *ngIf="showForm">
+    <form [formGroup]="eventoForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="titulo">Título do Evento *</label>
+          <input 
+            type="text" 
+            id="titulo" 
+            formControlName="titulo" 
+            placeholder="Digite o título do evento"
+            [class.invalid]="eventoForm.get('titulo')?.invalid && eventoForm.get('titulo')?.touched"
+          >
+          <div class="error-message" *ngIf="eventoForm.get('titulo')?.invalid && eventoForm.get('titulo')?.touched">
+            <span *ngIf="eventoForm.get('titulo')?.errors?.['required']">Título é obrigatório</span>
+            <span *ngIf="eventoForm.get('titulo')?.errors?.['minlength']">Título deve ter pelo menos 3 caracteres</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tipo">Tipo de Evento *</label>
+          <select 
+            id="tipo" 
+            formControlName="tipo"
+            [class.invalid]="eventoForm.get('tipo')?.invalid && eventoForm.get('tipo')?.touched"
+          >
+            <option value="">Selecione o tipo</option>
+            <option value="aniversario">Aniversário</option>
+            <option value="casamento">Casamento</option>
+            <option value="corporativo">Corporativo</option>
+            <option value="confraternizacao">Confraternização</option>
+            <option value="formatura">Formatura</option>
+            <option value="outro">Outro</option>
+          </select>
+          <div class="error-message" *ngIf="eventoForm.get('tipo')?.invalid && eventoForm.get('tipo')?.touched">
+            <span *ngIf="eventoForm.get('tipo')?.errors?.['required']">Tipo é obrigatório</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="data">Data *</label>
+          <input 
+            type="date" 
+            id="data" 
+            formControlName="data"
+            [class.invalid]="eventoForm.get('data')?.invalid && eventoForm.get('data')?.touched"
+          >
+          <div class="error-message" *ngIf="eventoForm.get('data')?.invalid && eventoForm.get('data')?.touched">
+            <span *ngIf="eventoForm.get('data')?.errors?.['required']">Data é obrigatória</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="hora">Hora</label>
+          <input 
+            type="time" 
+            id="hora" 
+            formControlName="hora"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="local">Local</label>
+        <input 
+          type="text" 
+          id="local" 
+          formControlName="local" 
+          placeholder="Digite o local do evento"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea 
+          id="descricao" 
+          formControlName="descricao" 
+          placeholder="Digite uma descrição do evento"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="toggleForm()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="loading || eventoForm.invalid">
+          {{ loading ? 'Salvando...' : (isEditing ? 'Atualizar Evento' : 'Criar Evento') }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de eventos - apenas quando o formulário não estiver aberto -->
+  <div class="eventos-lista" *ngIf="!showForm && !loading">
+    <div class="evento-card" *ngFor="let evento of eventos" (click)="editarEvento(evento)">
+      <div class="evento-header">
+        <h3>{{ evento.titulo }}</h3>
+        <div class="evento-actions">
+          <span class="status-badge" [class]="getEventoStatusClass(evento.status || '')">
+            {{ evento.status || 'ativo' }}
+          </span>
+          <button class="btn-icon" (click)="deletarEvento(evento.id!); $event.stopPropagation()" title="Deletar evento">
+            🗑️
+          </button>
+        </div>
+      </div>
+      
+      <div class="evento-info">
+        <div class="info-item">
+          <strong>Tipo:</strong> {{ evento.tipo }}
+        </div>
+        <div class="info-item">
+          <strong>Data:</strong> {{ formatarData(evento.data) }}
+          <span *ngIf="evento.hora"> às {{ formatarHora(evento.hora) }}</span>
+        </div>
+        <div class="info-item" *ngIf="evento.local">
+          <strong>Local:</strong> {{ evento.local }}
+        </div>
+        <div class="info-item" *ngIf="evento.descricao">
+          <strong>Descrição:</strong> {{ evento.descricao }}
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="eventos.length === 0">
+      <div class="empty-icon">📅</div>
+      <h3>Nenhum evento cadastrado</h3>
+      <p>Clique em "Novo Evento" para criar seu primeiro evento!</p>
+    </div>
+  </div>
+
+  <!-- Loading state - apenas quando não estiver mostrando o formulário -->
+  <div class="loading-state" *ngIf="loading && !showForm">
+    <div class="spinner"></div>
+    <p>Carregando eventos...</p>
   </div>
 </div>

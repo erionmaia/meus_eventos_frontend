@@ -5,51 +5,58 @@
       <span>Meu Evento</span>
     </div>
     <nav class="sidebar-nav">
-      <a class="nav-link" routerLink="eventos" routerLinkActive="active"><i class="fas fa-calendar"></i> Eventos</a>
-      <a class="nav-link" routerLink="convidados" routerLinkActive="active"><i class="fas fa-users"></i> Convidados</a>
-      <a class="nav-link" routerLink="convites" routerLinkActive="active"><i class="fas fa-envelope-open-text"></i> Convites</a>
-      <a class="nav-link" routerLink="sites" routerLinkActive="active"><i class="fas fa-globe"></i> Sites</a>
-      <a class="nav-link" routerLink="usuario" routerLinkActive="active"><i class="fas fa-user"></i> Painel do Usuário</a>
-      <a class="nav-link logout" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+      <a class="nav-link" routerLink="eventos" routerLinkActive="active" (click)="console.log('Clicou em Eventos')"><i class="fas fa-calendar"></i> Eventos</a>
+      <a class="nav-link" routerLink="convidados" routerLinkActive="active" (click)="console.log('Clicou em Convidados')"><i class="fas fa-users"></i> Convidados</a>
+      <a class="nav-link" routerLink="convites" routerLinkActive="active" (click)="console.log('Clicou em Convites')"><i class="fas fa-envelope-open-text"></i> Convites</a>
+      <a class="nav-link" routerLink="sites" routerLinkActive="active" (click)="console.log('Clicou em Sites')"><i class="fas fa-globe"></i> Sites</a>
+      <a class="nav-link" routerLink="usuario" routerLinkActive="active" (click)="console.log('Clicou em Usuario')"><i class="fas fa-user"></i> Painel do Usuário</a>
     </nav>
   </aside>
   <main class="dashboard-main">
     <header class="dashboard-header">
-      <div class="user-info">
-        <span>Olá, {{ userName }}!</span>
-        <img src="https://ui-avatars.com/api/?name=User" alt="Avatar" class="avatar">
-      </div>
+      <!-- Debug temporário
+      <div style="background: yellow; padding: 10px; margin: 10px;">
+        <strong>DEBUG:</strong> Dashboard carregado - URL: {{ window.location.href }}
+      </div> -->
     </header>
-    <section class="dashboard-cards">
+    <!-- Cards de estatísticas - ocultos quando formulário de eventos estiver aberto -->
+    <section class="dashboard-cards" *ngIf="!loading && !isEventFormOpen">
       <div class="dashboard-card">
         <i class="fas fa-calendar"></i>
         <div>
           <h3>Próximos Eventos</h3>
-          <span>{{ dashboardData.total_eventos_futuros }}</span>
+          <span>{{ dashboardData?.total_eventos_futuros || 0 }}</span>
         </div>
       </div>
       <div class="dashboard-card">
         <i class="fas fa-users"></i>
         <div>
           <h3>Total de Convidados</h3>
-          <span>{{ dashboardData.total_convidados }}</span>
+          <span>{{ dashboardData?.total_convidados || 0 }}</span>
         </div>
       </div>
       <div class="dashboard-card">
         <i class="fas fa-envelope"></i>
         <div>
           <h3>Convites Pendentes</h3>
-          <span>5</span>
+          <span>{{ dashboardData?.totalUserConvidados || 0 }}</span>
         </div>
       </div>
       <div class="dashboard-card">
         <i class="fas fa-globe"></i>
         <div>
           <h3>Sites de Evento</h3>
-          <span>1</span>
+          <span>{{ dashboardData?.totalUserEventos || 0 }}</span>
         </div>
       </div>
     </section>
-    <router-outlet></router-outlet>
+    
+    <!-- Área para o conteúdo das rotas filhas -->
+    <div class="dashboard-content">
+      <!-- <div style="background: lightblue; padding: 10px; margin: 10px;">
+        <strong>DEBUG:</strong> Área do router-outlet
+      </div> -->
+      <router-outlet></router-outlet>
+    </div>
   </main>
 </div>
