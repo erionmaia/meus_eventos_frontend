@@ -1,7 +1,7 @@
 <div class="convidados-wrapper">
   <div class="convidados-header">
     <h2>{{ getHeaderTitle() }}</h2>
-    <button class="btn btn-primary" (click)="toggleForm()" *ngIf="!showForm">
+    <button class="btn btn-primary btn-md" (click)="toggleForm()" *ngIf="!showForm">
       {{ showForm ? 'Cancelar' : '+ Novo Convidado' }}
     </button>
   </div>
@@ -100,28 +100,7 @@
 
   <!-- Lista de convidados - apenas quando o formulário não estiver aberto -->
   <div class="convidados-lista" *ngIf="!showForm && !loading">
-    <!-- Filtro por evento -->
-    <div class="filtro-eventos">
-      <div class="filtro-header">
-        <h3>Filtrar por Evento</h3>
-        <button class="btn btn-secondary btn-small" (click)="limparFiltro()" *ngIf="eventoSelecionado">
-          Limpar Filtro
-        </button>
-      </div>
-      <div class="filtro-opcoes">
-        <label class="radio-option">
-          <input type="radio" name="filtroEvento" [checked]="mostrarTodosEventos" (change)="mostrarTodosEventos = true; eventoSelecionado = ''">
-          <span>Todos os Eventos</span>
-        </label>
-        <div class="evento-opcoes">
-          <label class="radio-option" *ngFor="let evento of eventos">
-            <input type="radio" name="filtroEvento" [value]="evento.id" [checked]="eventoSelecionado === evento.id" (change)="eventoSelecionado = evento.id; onEventoChange()">
-            <span>{{ evento.titulo }} - {{ formatarData(evento.data) }}</span>
-          </label>
-        </div>
-      </div>
-    </div>
-
+    
     <!-- Filtros e estatísticas -->
     <div class="convidados-stats">
       <div class="stat-item">
@@ -142,128 +121,112 @@
       </div>
     </div>
 
-    <!-- Visualização agrupada por evento -->
-    <div class="convidados-agrupados" *ngIf="mostrarTodosEventos && convidadosPorEvento.length > 0">
-      <div class="grupo-evento" *ngFor="let grupo of convidadosPorEvento">
-        <div class="grupo-header">
-          <h3>{{ grupo.evento.titulo }}</h3>
-          <span class="evento-data">{{ formatarData(grupo.evento.data) }}</span>
-          <span class="convidados-count">{{ grupo.convidados.length }} convidado(s)</span>
-        </div>
-        
-        <div class="convidados-grid">
-          <div class="convidado-card" *ngFor="let convidado of grupo.convidados" (click)="editarConvidado(convidado)">
-            <div class="convidado-header">
-              <div class="convidado-info">
-                <h4>{{ convidado.name }}</h4>
-                <div class="convidado-meta">
-                  <span class="email" *ngIf="convidado.email">{{ convidado.email }}</span>
-                  <span class="phone" *ngIf="convidado.phone">{{ convidado.phone }}</span>
+    <!-- Filtro por evento -->
+    <div class="filtro-eventos">
+      <div class="filtro-header">
+        <h3>Filtrar por Evento</h3>
+        <button class="btn btn-secondary btn-small" (click)="limparFiltro()" *ngIf="eventoSelecionado">
+          Limpar Filtro
+        </button>
+      </div>
+      <div class="filtro-opcoes">
+        <label for="filtroEvento">Escolha o Evento que deseja filtrar:</label>
+        <select 
+          id="filtroEvento" 
+          [(ngModel)]="eventoSelecionado" 
+          (change)="onEventoChange()"
+          class="filtro-select"
+        >
+          <option value="">Todos os Eventos</option>
+          <option *ngFor="let evento of eventos" [value]="evento.id">
+            {{ evento.titulo }} - {{ formatarData(evento.data) }}
+          </option>
+        </select>
+      </div>
+
+
+    <!-- Visualização em tabela -->
+    <div class="convidados-tabela" *ngIf="getConvidadosFiltrados().length > 0">
+      <h3>Convidados</h3>
+      <div class="table-container">
+        <table class="convidados-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Telefone</th>
+              <th>Grupo</th>
+              <th>Evento</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let convidado of getConvidadosFiltrados()" class="convidado-row" (click)="editarConvidado(convidado)">
+              <td class="nome-cell">
+                <div class="convidado-info">
+                  <strong>{{ convidado.name }}</strong>
                 </div>
-              </div>
-              <div class="convidado-actions">
+              </td>
+              <td class="email-cell">
+                <span *ngIf="convidado.email">{{ convidado.email }}</span>
+                <span *ngIf="!convidado.email" class="text-muted">-</span>
+              </td>
+              <td class="phone-cell">
+                <span *ngIf="convidado.phone">{{ convidado.phone }}</span>
+                <span *ngIf="!convidado.phone" class="text-muted">-</span>
+              </td>
+              <td class="grupo-cell">
+                <span class="grupo-badge">{{ getGrupoText(convidado.groupId) }}</span>
+              </td>
+              <td class="evento-cell">
+                <span>{{ getEventoById(convidado.eventId)?.titulo || '-' }}</span>
+              </td>
+              <td class="status-cell">
                 <span class="status-badge" [class]="getStatusClass(convidado)">
                   {{ getStatusText(convidado) }}
                 </span>
-                <button class="btn-icon" (click)="deletarConvidado(convidado.id!); $event.stopPropagation()" title="Deletar convidado">
-                  🗑️
-                </button>
-              </div>
-            </div>
-            
-            <div class="convidado-details">
-              <div class="detail-item">
-                <strong>Grupo:</strong> {{ getGrupoText(convidado.groupId) }}
-              </div>
-              <div class="detail-item" *ngIf="convidado.sentAt">
-                <strong>Convite enviado:</strong> {{ formatarData(convidado.sentAt) }}
-              </div>
-            </div>
-
-            <!-- Ações rápidas -->
-            <div class="convidado-quick-actions">
-              <button class="btn btn-primary" 
-                      [class.btn-success]="convidado.confirmed" 
-                      [class.btn-warning]="!convidado.confirmed"
-                      (click)="toggleConfirmacao(convidado); $event.stopPropagation()">
-                {{ convidado.confirmed ? '✓ Confirmado' : 'Confirmar Presença' }}
-              </button>
-              <button class="btn btn-primary" 
-                      *ngIf="!convidado.sent"
-                      (click)="enviarConvite(convidado); $event.stopPropagation()">
-                Enviar Convite
-              </button>
-              <button class="btn btn-primary" 
-                      *ngIf="convidado.sent && !convidado.confirmed"
-                      (click)="reenviarConvite(convidado); $event.stopPropagation()">
-                Reenviar
-              </button>
-            </div>
-          </div>
-        </div>
+              </td>
+              <td class="acoes-cell">
+                <div class="acoes-buttons">
+                  <button class="btn-icon" 
+                          [class.btn-success]="convidado.confirmed" 
+                          [class.btn-warning]="!convidado.confirmed"
+                          (click)="toggleConfirmacao(convidado); $event.stopPropagation()" 
+                          title="Confirmar presença">
+                    {{ convidado.confirmed ? '✓' : '○' }}
+                  </button>
+                  <button class="btn-icon" 
+                          *ngIf="!convidado.sent"
+                          (click)="enviarConvite(convidado); $event.stopPropagation()" 
+                          title="Enviar convite">
+                    📧
+                  </button>
+                  <button class="btn-icon" 
+                          *ngIf="convidado.sent && !convidado.confirmed"
+                          (click)="reenviarConvite(convidado); $event.stopPropagation()" 
+                          title="Reenviar convite">
+                    🔄
+                  </button>
+                  <button class="btn-icon btn-delete" 
+                          (click)="deletarConvidado(convidado.id!); $event.stopPropagation()" 
+                          title="Deletar convidado">
+                    🗑️
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Lista simples quando filtrado por evento específico -->
-    <div class="convidados-simples" *ngIf="!mostrarTodosEventos && getConvidadosFiltrados().length > 0">
-      <div class="convidado-card" *ngFor="let convidado of getConvidadosFiltrados()" (click)="editarConvidado(convidado)">
-        <div class="convidado-header">
-          <div class="convidado-info">
-            <h3>{{ convidado.name }}</h3>
-            <div class="convidado-meta">
-              <span class="email" *ngIf="convidado.email">{{ convidado.email }}</span>
-              <span class="phone" *ngIf="convidado.phone">{{ convidado.phone }}</span>
-            </div>
-          </div>
-          <div class="convidado-actions">
-            <span class="status-badge" [class]="getStatusClass(convidado)">
-              {{ getStatusText(convidado) }}
-            </span>
-            <button class="btn-icon" (click)="deletarConvidado(convidado.id!); $event.stopPropagation()" title="Deletar convidado">
-              🗑️
-            </button>
-          </div>
-        </div>
-        
-        <div class="convidado-details">
-          <div class="detail-item">
-            <strong>Grupo:</strong> {{ getGrupoText(convidado.groupId) }}
-          </div>
-          <div class="detail-item" *ngIf="convidado.sentAt">
-            <strong>Convite enviado:</strong> {{ formatarData(convidado.sentAt) }}
-          </div>
-          <div class="detail-item" *ngIf="convidado.sendMethod">
-            <strong>Método:</strong> {{ convidado.sendMethod === 'email' ? 'E-mail' : 'SMS' }}
-          </div>
-        </div>
-
-        <!-- Ações rápidas -->
-        <div class="convidado-quick-actions">
-          <button class="btn btn-primary" 
-                  [class.btn-success]="convidado.confirmed" 
-                  [class.btn-warning]="!convidado.confirmed"
-                  (click)="toggleConfirmacao(convidado); $event.stopPropagation()">
-            {{ convidado.confirmed ? '✓ Confirmado' : 'Confirmar Presença' }}
-          </button>
-          <button class="btn btn-primary" 
-                  *ngIf="!convidado.sent"
-                  (click)="enviarConvite(convidado); $event.stopPropagation()">
-            Enviar Convite
-          </button>
-          <button class="btn btn-primary" 
-                  *ngIf="convidado.sent && !convidado.confirmed"
-                  (click)="reenviarConvite(convidado); $event.stopPropagation()">
-            Reenviar
-          </button>
-        </div>
-      </div>
-    </div>
-
+    <!-- Estado vazio -->
     <div class="empty-state" *ngIf="getConvidadosFiltrados().length === 0">
       <div class="empty-icon">👥</div>
       <h3>Nenhum convidado encontrado</h3>
-      <p *ngIf="mostrarTodosEventos">Clique em "Novo Convidado" para adicionar seus primeiros convidados!</p>
-      <p *ngIf="!mostrarTodosEventos">Nenhum convidado encontrado para o evento selecionado.</p>
+      <p *ngIf="!eventoSelecionado">Clique em "Novo Convidado" para adicionar seus primeiros convidados!</p>
+      <p *ngIf="eventoSelecionado">Nenhum convidado encontrado para o evento selecionado.</p>
     </div>
   </div>
 

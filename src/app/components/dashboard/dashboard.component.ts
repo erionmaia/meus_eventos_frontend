@@ -24,7 +24,7 @@ export class DashboardComponent {
   console = console; // Para debug
 
   constructor(
-    private auth: AuthService, 
+    public authService: AuthService, // Mudado para public para usar no template
     private dashboardService: DashboardService,
     private themeService: ThemeService
   ) {}

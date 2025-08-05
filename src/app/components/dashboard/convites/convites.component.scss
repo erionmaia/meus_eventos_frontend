@@ -15,20 +15,39 @@
   color: var(--primary-color);
   margin: 0;
 }
-.btn.btn-primary {
-  background: var(--primary-color);
-  color: #fff;
+
+// Padronizar botões
+.btn {
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
-  padding: 0.5rem 1.2rem;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+
+  &.btn-primary {
+    background: var(--background-color) !important;
+    color: var(--text-color) !important;
+    border: 2px solid var(--primary-color) !important;
+
+    &:hover {
+      background: var(--primary-color) !important;
+      color: var(--background-color) !important;
+    }
+
+    &:disabled {
+      opacity: 0.6 !important;
+      cursor: not-allowed !important;
+      border-color: var(--border-color) !important;
+      color: var(--border-color) !important;
+    }
+  }
 }
-.btn.btn-primary:hover {
-  background: #ff4b4b;
-}
+
 .convites-lista {
   color: var(--text-color);
   opacity: 0.85;

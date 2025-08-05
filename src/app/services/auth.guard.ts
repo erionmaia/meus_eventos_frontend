@@ -21,25 +21,25 @@ export class AuthGuard {
     // Para testes, vamos simular um usuário autenticado
     console.log('AuthGuard: Usuário não autenticado, mas permitindo acesso para testes');
     
-    // Simular dados de usuário para testes
-    const mockUser = {
-      id: 1,
-      name: 'Usuário Teste',
-      email: 'teste@exemplo.com',
-      role: 'user'
-    };
+    // // Simular dados de usuário para testes
+    // const mockUser = {
+    //   id: 1,
+    //   name: 'Usuário Teste',
+    //   email: 'teste@exemplo.com',
+    //   role: 'user'
+    // };
     
-    const mockAuthResponse = {
-      user: mockUser,
-      token: 'mock-token-123',
-      expiresIn: 3600
-    };
+    // const mockAuthResponse = {
+    //   user: mockUser,
+    //   token: 'mock-token-123',
+    //   expiresIn: 3600
+    // };
     
-    this.auth.setSession(mockAuthResponse);
-    return true;
+    // this.auth.setSession(mockAuthResponse);
+    // return true;
     
     // Descomente as linhas abaixo quando quiser reativar a autenticação real
-    // this.router.navigate(['/login']);
-    // return false;
+    this.router.navigate(['/login']);
+    return false;
   }
 } 

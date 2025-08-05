@@ -1,7 +1,7 @@
 <div class="eventos-wrapper">
   <div class="eventos-header">
     <h2>{{ getHeaderTitle() }}</h2>
-    <button class="btn btn-primary" (click)="toggleForm()" *ngIf="!showForm">
+    <button class="btn btn-primary btn-md" (click)="toggleForm()" *ngIf="!showForm">
       {{ showForm ? 'Cancelar' : '+ Novo Evento' }}
     </button>
   </div>

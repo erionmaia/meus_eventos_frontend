@@ -85,4 +85,27 @@ export class AuthService {
       this.userSubject.next(updatedUser);
     }
   }
+
+  public isSuperAdmin(): boolean {
+    const currentUser = this.currentUser;
+    return currentUser?.role === 'superAdmin';
+  }
+
+  // Método para testes - simular login de super admin
+  public loginAsSuperAdmin(): void {
+    const superAdminUser: User = {
+      id: 1,
+      name: 'Super Admin',
+      email: 'admin@meuseventos.com',
+      role: 'superAdmin'
+    };
+
+    const mockAuthResponse: AuthResponse = {
+      user: superAdminUser,
+      token: 'mock-super-admin-token',
+      expiresIn: 3600
+    };
+
+    this.setSession(mockAuthResponse);
+  }
 } 

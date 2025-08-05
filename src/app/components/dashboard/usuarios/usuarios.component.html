@@ -1,0 +1,160 @@
+<div class="usuarios-wrapper">
+  <div class="usuarios-header">
+    <h2>Gerenciar Usuários</h2>
+    <button class="btn btn-primary" (click)="toggleForm()" *ngIf="!showForm">
+      <i class="fas fa-plus"></i> Novo Usuário
+    </button>
+  </div>
+
+  <!-- Alertas -->
+  <div class="alert alert-success" *ngIf="successMessage" (click)="successMessage = ''">
+    {{ successMessage }}
+  </div>
+  <div class="alert alert-danger" *ngIf="errorMessage" (click)="errorMessage = ''">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Formulário de cadastro -->
+  <div class="usuarios-form" *ngIf="showForm">
+    <form [formGroup]="usuariosForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Nome Completo *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Digite o nome completo"
+            [class.invalid]="usuariosForm.get('name')?.invalid && usuariosForm.get('name')?.touched">
+          <div class="error-message" *ngIf="usuariosForm.get('name')?.invalid && usuariosForm.get('name')?.touched">
+            <span *ngIf="usuariosForm.get('name')?.errors?.['required']">Nome é obrigatório</span>
+            <span *ngIf="usuariosForm.get('name')?.errors?.['minlength']">Nome deve ter pelo menos 3 caracteres</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail *</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="Digite o e-mail"
+            [class.invalid]="usuariosForm.get('email')?.invalid && usuariosForm.get('email')?.touched">
+          <div class="error-message" *ngIf="usuariosForm.get('email')?.invalid && usuariosForm.get('email')?.touched">
+            <span *ngIf="usuariosForm.get('email')?.errors?.['required']">E-mail é obrigatório</span>
+            <span *ngIf="usuariosForm.get('email')?.errors?.['email']">E-mail inválido</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Senha *</label>
+          <input 
+            type="password" 
+            id="password" 
+            formControlName="password" 
+            placeholder="Digite a senha"
+            [class.invalid]="usuariosForm.get('password')?.invalid && usuariosForm.get('password')?.touched">
+          <div class="error-message" *ngIf="usuariosForm.get('password')?.invalid && usuariosForm.get('password')?.touched">
+            <span *ngIf="usuariosForm.get('password')?.errors?.['required']">Senha é obrigatória</span>
+            <span *ngIf="usuariosForm.get('password')?.errors?.['minlength']">Senha deve ter pelo menos 6 caracteres</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Senha *</label>
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            formControlName="confirmPassword" 
+            placeholder="Confirme a senha"
+            [class.invalid]="usuariosForm.get('confirmPassword')?.invalid && usuariosForm.get('confirmPassword')?.touched">
+          <div class="error-message" *ngIf="usuariosForm.get('confirmPassword')?.invalid && usuariosForm.get('confirmPassword')?.touched">
+            <span *ngIf="usuariosForm.get('confirmPassword')?.errors?.['required']">Confirmação de senha é obrigatória</span>
+            <span *ngIf="usuariosForm.get('confirmPassword')?.errors?.['passwordMismatch']">Senhas não coincidem</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Tipo de Usuário *</label>
+        <select 
+          id="role" 
+          formControlName="role"
+          [class.invalid]="usuariosForm.get('role')?.invalid && usuariosForm.get('role')?.touched">
+          <option value="user">Usuário</option>
+          <option value="admin">Administrador</option>
+          <option value="superAdmin">Super Administrador</option>
+        </select>
+        <div class="error-message" *ngIf="usuariosForm.get('role')?.invalid && usuariosForm.get('role')?.touched">
+          <span *ngIf="usuariosForm.get('role')?.errors?.['required']">Tipo de usuário é obrigatório</span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="toggleForm()" [disabled]="loading">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="usuariosForm.invalid || loading">
+          <span *ngIf="!loading">Cadastrar Usuário</span>
+          <span *ngIf="loading">Cadastrando...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de usuários -->
+  <div class="usuarios-lista" *ngIf="!showForm">
+    <div class="usuarios-table-container">
+      <table class="usuarios-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Tipo</th>
+            <th>Data de Cadastro</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios" class="usuario-row">
+            <td class="nome-cell">
+              <strong>{{ usuario.name }}</strong>
+            </td>
+            <td class="email-cell">
+              {{ usuario.email }}
+            </td>
+            <td class="role-cell">
+              <span class="role-badge" [class]="getRoleClass(usuario.role)">
+                {{ getRoleText(usuario.role) }}
+              </span>
+            </td>
+            <td class="data-cell">
+              {{ usuario.createdAt }}
+            </td>
+            <td class="acoes-cell">
+              <div class="acoes-buttons">
+                <button class="btn-icon btn-edit" title="Editar usuário">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-delete" 
+                        (click)="deletarUsuario(usuario.id)" 
+                        title="Deletar usuário">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Estado vazio -->
+    <div class="empty-state" *ngIf="usuarios.length === 0">
+      <div class="empty-icon">👥</div>
+      <h3>Nenhum usuário cadastrado</h3>
+      <p>Clique em "Novo Usuário" para adicionar o primeiro usuário!</p>
+    </div>
+  </div>
+</div> 

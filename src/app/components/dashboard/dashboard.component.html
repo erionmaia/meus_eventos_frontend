@@ -10,6 +10,8 @@
       <a class="nav-link" routerLink="convites" routerLinkActive="active" (click)="console.log('Clicou em Convites')"><i class="fas fa-envelope-open-text"></i> Convites</a>
       <a class="nav-link" routerLink="sites" routerLinkActive="active" (click)="console.log('Clicou em Sites')"><i class="fas fa-globe"></i> Sites</a>
       <a class="nav-link" routerLink="usuario" routerLinkActive="active" (click)="console.log('Clicou em Usuario')"><i class="fas fa-user"></i> Painel do Usuário</a>
+      <!-- Link apenas para super admins -->
+      <a class="nav-link" routerLink="usuarios" routerLinkActive="active" (click)="console.log('Clicou em Usuarios')" *ngIf="authService.isSuperAdmin()"><i class="fas fa-user-cog"></i> Gerenciar Usuários</a>
     </nav>
   </aside>
   <main class="dashboard-main">

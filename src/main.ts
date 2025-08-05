@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app/app.routes';
 import { AuthService } from './app/services/auth.service';
 import { AuthGuard } from './app/services/auth.guard';
+import { SuperAdminGuard } from './app/services/super-admin.guard';
 
 if (environment.production) {
   enableProdMode();
@@ -25,6 +26,7 @@ bootstrapApplication(AppComponent, {
       RouterModule.forRoot(routes)
     ),
     AuthService,
-    AuthGuard
+    AuthGuard,
+    SuperAdminGuard
   ]
 }).catch(err => console.error(err));

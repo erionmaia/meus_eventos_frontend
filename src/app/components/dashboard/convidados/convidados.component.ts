@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ConvidadosService, Convidado } from '../../../services/convidados.service';
 import { AuthService } from '../../../services/auth.service';
 import { ThemeService } from '../../../services/theme.service';
@@ -21,7 +21,7 @@ interface ConvidadosPorEvento {
   templateUrl: './convidados.component.html',
   styleUrls: ['./convidados.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule]
 })
 export class ConvidadosComponent implements OnInit { 
 
@@ -38,7 +38,6 @@ export class ConvidadosComponent implements OnInit {
   eventos: Evento[] = [];
   convidadosPorEvento: ConvidadosPorEvento[] = [];
   eventoSelecionado: string = '';
-  mostrarTodosEventos: boolean = true;
 
   constructor(
     private convidadosService: ConvidadosService,
@@ -124,10 +123,6 @@ export class ConvidadosComponent implements OnInit {
     }
 
     getConvidadosFiltrados(): Convidado[] {
-      if (this.mostrarTodosEventos) {
-        return this.convidados;
-      }
-      
       if (this.eventoSelecionado) {
         return this.convidados.filter(c => c.eventId === this.eventoSelecionado);
       }
@@ -185,15 +180,14 @@ export class ConvidadosComponent implements OnInit {
       return date.toLocaleDateString('pt-BR');
     }
 
-    // Métodos de filtro
-    onEventoChange(): void {
-      this.mostrarTodosEventos = !this.eventoSelecionado;
-    }
+          // Métodos de filtro
+      onEventoChange(): void {
+        // Método chamado quando o filtro muda
+      }
 
-    limparFiltro(): void {
-      this.eventoSelecionado = '';
-      this.mostrarTodosEventos = true;
-    }
+      limparFiltro(): void {
+        this.eventoSelecionado = '';
+      }
 
     // Métodos de ações
     editarConvidado(convidado: Convidado): void {
